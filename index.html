@@ -1,526 +1,452 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>VapeShop - Clean & Easy</title>
+  <title>V Plug - Vape Store</title>
   <style>
-    /* Basic Reset & font */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    :root {
+      --dark-bg: #121212;
+      --dark-bg2: #1f1f1f;
+      --text-light: #e0e0e0;
+      --accent-blue: #3b82f6;
+      --accent-purple: #8b5cf6;
+      --accent-gradient: linear-gradient(270deg, var(--accent-blue), var(--accent-purple));
+      --border-radius: 12px;
+      --gap: 1rem;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
     }
+
+    @keyframes gradientAnim {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
     body {
-      background: #f9f9f9;
-      color: #222;
-      min-height: 100vh;
+      margin: 0;
+      background: var(--dark-bg);
+      color: var(--text-light);
+      font-family: var(--font-sans);
+      line-height: 1.5;
       display: flex;
       flex-direction: column;
-      line-height: 1.5;
+      min-height: 100vh;
     }
+
+    /* Header */
     header {
-      background-color: #222;
-      color: #fff;
-      padding: 15px 30px;
-      font-weight: 700;
-      font-size: 1.8rem;
+      position: sticky;
+      top: 0;
+      background: var(--dark-bg2);
+      border-bottom: 2px solid var(--accent-blue);
+      padding: 1rem 2rem;
+      z-index: 100;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      animation: fadeIn 1s ease forwards;
+    }
+    header h1 {
+      margin: 0;
+      font-weight: 900;
+      font-size: 1.8rem;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 600% 600%;
+      animation: gradientAnim 6s ease infinite;
       user-select: none;
     }
-    header .cart-icon {
-      position: relative;
-      font-size: 1.6rem;
-      cursor: pointer;
+    header nav a {
+      color: var(--text-light);
+      text-decoration: none;
+      margin-left: 2rem;
+      font-weight: 600;
+      transition: color 0.3s ease;
     }
-    header .cart-count {
-      position: absolute;
-      top: -8px;
-      right: -10px;
-      background: #f39c12;
-      color: #000;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 50%;
-      font-size: 0.8rem;
-      user-select: none;
-      min-width: 22px;
-      text-align: center;
+    header nav a:hover {
+      color: var(--accent-purple);
     }
+
+    /* Main layout */
     main {
-      max-width: 1100px;
-      margin: 30px auto;
-      padding: 0 15px;
+      flex: 1;
       display: flex;
-      gap: 25px;
-      flex-wrap: wrap;
-      justify-content: center;
+      gap: var(--gap);
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
     }
-    /* Product cards */
-    .products {
-      flex: 2;
-      min-width: 320px;
+
+    /* Product List */
+    .product-list {
+      flex: 3;
+      display: grid;
+      grid-template-columns: repeat(auto-fill,minmax(240px,1fr));
+      gap: var(--gap);
     }
+
     .product-card {
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
-      padding: 18px;
+      background: var(--dark-bg2);
+      border-radius: var(--border-radius);
+      padding: 1rem;
+      box-shadow: inset 0 0 10px #222;
       display: flex;
-      gap: 20px;
-      align-items: center;
-      margin-bottom: 20px;
+      flex-direction: column;
+      justify-content: space-between;
       transition: box-shadow 0.3s ease;
     }
     .product-card:hover {
-      box-shadow: 0 4px 14px rgb(0 0 0 / 0.15);
+      box-shadow: 0 0 16px var(--accent-blue);
     }
     .product-image {
-      width: 140px;
-      height: 140px;
-      object-fit: contain;
-      border-radius: 12px;
-      background: #fefefe;
-      border: 1px solid #ddd;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #222;
+      border-radius: var(--border-radius);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      font-size: 0.9rem;
+      user-select: none;
     }
     .product-info {
       flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      height: 140px;
     }
-    .product-info h3 {
-      font-size: 1.3rem;
-      color: #111;
-      margin-bottom: 8px;
-    }
-    .price {
-      color: #e74c3c;
+    .product-title {
       font-weight: 700;
-      font-size: 1.2rem;
-      margin-bottom: 10px;
+      font-size: 1.1rem;
+      margin: 0 0 0.25rem 0;
     }
-    button.add-to-cart {
-      align-self: flex-start;
-      background-color: #f39c12;
+    .product-price {
+      font-weight: 600;
+      color: var(--accent-blue);
+      margin-bottom: 0.5rem;
+    }
+    .product-actions {
+      margin-top: auto;
+    }
+    .product-actions select,
+    .product-actions input[type="number"] {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 8px;
+      border: 2px solid #444;
+      background: var(--dark-bg);
+      color: var(--text-light);
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      transition: border-color 0.3s ease;
+    }
+    .product-actions select:focus,
+    .product-actions input[type="number"]:focus {
+      outline: none;
+      border-image: var(--accent-gradient) 1;
+      animation: gradientAnim 4s ease infinite;
+    }
+
+    .add-to-cart-btn {
+      width: 100%;
+      padding: 0.75rem;
+      font-weight: 700;
       border: none;
-      color: #000;
-      padding: 10px 18px;
-      border-radius: 6px;
-      font-weight: 700;
+      border-radius: 12px;
       cursor: pointer;
-      transition: background-color 0.2s ease;
+      background: var(--accent-gradient);
+      color: white;
+      box-shadow: 0 4px 14px rgb(59 130 246 / 0.6);
+      transition: background 0.3s ease;
+      font-size: 1rem;
     }
-    button.add-to-cart:hover {
-      background-color: #d87e04;
+    .add-to-cart-btn:hover:not(:disabled) {
+      background: linear-gradient(270deg, var(--accent-purple), var(--accent-blue));
     }
-    /* Cart Sidebar */
-    .cart-sidebar {
+    .add-to-cart-btn:disabled {
+      background: #555;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Cart sidebar */
+    aside.cart-sidebar {
       flex: 1;
-      min-width: 280px;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgb(0 0 0 / 0.1);
-      padding: 20px;
-      max-height: 600px;
+      background: var(--dark-bg2);
+      border-radius: var(--border-radius);
+      padding: 1rem;
+      max-height: 80vh;
       display: flex;
       flex-direction: column;
+      box-shadow: inset 0 0 10px #222;
       position: sticky;
-      top: 30px;
+      top: 90px;
     }
-    .cart-sidebar h2 {
-      margin-bottom: 15px;
-      font-size: 1.5rem;
-      border-bottom: 2px solid #f39c12;
-      padding-bottom: 8px;
+    aside.cart-sidebar h2 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-weight: 700;
+      font-size: 1.3rem;
+      text-align: center;
+      border-bottom: 1px solid var(--accent-blue);
+      padding-bottom: 0.5rem;
     }
+
     .cart-items {
-      flex-grow: 1;
+      flex: 1;
       overflow-y: auto;
-      margin-bottom: 15px;
+      padding-right: 0.5rem;
     }
     .cart-item {
-      display: flex;
-      align-items: center;
-      margin-bottom: 15px;
-      gap: 12px;
-      border-bottom: 1px solid #eee;
-      padding-bottom: 12px;
-    }
-    .cart-item img {
-      width: 60px;
-      height: 60px;
-      object-fit: contain;
-      border-radius: 8px;
-      background: #fafafa;
-      border: 1px solid #ddd;
-    }
-    .cart-item-info {
-      flex-grow: 1;
-    }
-    .cart-item-info h4 {
-      font-size: 1rem;
-      color: #111;
-      margin-bottom: 4px;
-    }
-    .cart-item-info p {
-      font-size: 0.9rem;
-      color: #666;
-    }
-    .cart-item-actions button {
-      background: #e74c3c;
-      border: none;
-      color: white;
-      padding: 5px 9px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: background-color 0.2s ease;
-    }
-    .cart-item-actions button:hover {
-      background: #c0392b;
-    }
-    .cart-total {
-      font-size: 1.4rem;
-      font-weight: 700;
-      border-top: 2px solid #ddd;
-      padding-top: 12px;
-      color: #222;
-    }
-    .checkout-btn {
-      margin-top: 15px;
-      background: #f39c12;
-      border: none;
-      padding: 14px 16px;
-      border-radius: 8px;
-      font-weight: 700;
-      cursor: pointer;
-      width: 100%;
-      font-size: 1.1rem;
-      transition: background-color 0.2s ease;
-      color: #000;
-    }
-    .checkout-btn:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-      color: #666;
-    }
-    .checkout-btn:hover:not(:disabled) {
-      background-color: #d87e04;
-    }
-    /* Reviews */
-    .reviews-section {
-      background: #fff;
+      background: #222;
       border-radius: 10px;
-      box-shadow: 0 2px 10px rgb(0 0 0 / 0.1);
-      padding: 20px;
-      max-width: 800px;
-      margin: 40px auto;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      border: 2px solid transparent;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      animation: fadeIn 0.3s ease forwards;
     }
-    .reviews-section h2 {
-      font-size: 1.6rem;
-      margin-bottom: 18px;
-      border-bottom: 2px solid #f39c12;
-      padding-bottom: 8px;
+    .cart-item.blue-raz {
+      border-image: linear-gradient(270deg, var(--accent-blue), var(--accent-purple)) 1;
+      border-style: solid;
     }
-    .review {
-      border-bottom: 1px solid #eee;
-      padding: 12px 0;
-    }
-    .review:last-child {
-      border-bottom: none;
-    }
-    .review-header {
+    .cart-item-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 6px;
-    }
-    .reviewer-name {
-      font-weight: 700;
-      color: #222;
-    }
-    .review-rating {
-      color: #f39c12;
-      font-size: 1.1rem;
-    }
-    .review-text {
-      color: #555;
-      font-size: 1rem;
-      line-height: 1.4;
-      margin-left: 4px;
-    }
-    /* Notification */
-    .notification {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background-color: #222;
-      color: #fff;
-      padding: 14px 22px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease;
-      z-index: 1000;
       font-weight: 600;
-      min-width: 240px;
-      text-align: center;
+      margin-bottom: 0.3rem;
+    }
+    .cart-item .remove-btn {
+      background: transparent;
+      border: none;
+      color: #f87171;
+      font-size: 1.4rem;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 0;
+      line-height: 1;
       user-select: none;
     }
-    .notification.show {
-      opacity: 1;
-      pointer-events: auto;
+    .cart-item .remove-btn:hover {
+      color: #ef4444;
     }
+    .cart-item-details {
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+    .cart-summary {
+      margin-top: 1rem;
+      border-top: 1px solid #444;
+      padding-top: 1rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-align: center;
+      color: var(--accent-blue);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--dark-bg2);
+      color: #666;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      border-top: 1px solid #333;
+    }
+
     /* Responsive */
     @media (max-width: 900px) {
       main {
         flex-direction: column;
-        align-items: center;
+        padding: 1rem;
       }
-      .cart-sidebar {
+      aside.cart-sidebar {
+        position: static;
         max-height: none;
-        position: relative;
-        top: auto;
-        margin-top: 30px;
-        width: 100%;
+        margin-top: 2rem;
       }
     }
   </style>
 </head>
 <body>
-
   <header>
-    VapeShop
-    <div class="cart-icon" aria-label="Shopping Cart" tabindex="0">
-      🛒
-      <span class="cart-count" id="cart-count">0</span>
-    </div>
+    <h1>V Plug💨</h1>
+    <nav aria-label="Primary navigation">
+      <a href="#products">Products</a>
+      <a href="#cart">Cart</a>
+      <a href="#reviews">Reviews</a>
+    </nav>
   </header>
 
   <main>
-    <section class="products" id="products">
-      <!-- Products inserted here -->
+    <!-- Product list -->
+    <section class="product-list" id="products" aria-label="Available vape products">
+      <article class="product-card" data-name="Blue Raz Disposable" data-type="disposable" data-price="22" data-ml="2" data-ml-amount="0.8">
+        <div class="product-image" aria-label="Blue Raz Disposable Vape Device">🫐</div>
+        <div class="product-info">
+          <h2 class="product-title">Blue Raz Disposable</h2>
+          <div class="product-price">$22.00</div>
+        </div>
+        <form class="product-actions" aria-label="Select options to add Blue Raz Disposable to cart">
+          <label for="ml-blue-raz" style="display:none">Milliliters</label>
+          <select name="ml" id="ml-blue-raz" aria-hidden="true" disabled>
+            <option selected>2ml</option>
+          </select>
+          <label for="qty-blue-raz" class="sr-only">Quantity</label>
+          <input type="number" id="qty-blue-raz" name="quantity" min="1" value="1" />
+          <button type="submit" class="add-to-cart-btn">Add to Cart</button>
+        </form>
+      </article>
+
+      <article class="product-card" data-name="Purple Soda Disposable" data-type="disposable" data-price="22" data-ml="2" data-ml-amount="0.8">
+        <div class="product-image" aria-label="Purple Soda Disposable Vape Device">🥤</div>
+        <div class="product-info">
+          <h2 class="product-title">Purple Soda Disposable</h2>
+          <div class="product-price">$22.00</div>
+        </div>
+        <form class="product-actions" aria-label="Select options to add Purple Soda Disposable to cart">
+          <label for="ml-purple-soda" style="display:none">Milliliters</label>
+          <select name="ml" id="ml-purple-soda" aria-hidden="true" disabled>
+            <option selected>2ml</option>
+          </select>
+          <label for="qty-purple-soda" class="sr-only">Quantity</label>
+          <input type="number" id="qty-purple-soda" name="quantity" min="1" value="1" />
+          <button type="submit" class="add-to-cart-btn">Add to Cart</button>
+        </form>
+      </article>
+
+      <article class="product-card" data-name="Mango Disposable" data-type="disposable" data-price="22" data-ml="2" data-ml-amount="0.8">
+        <div class="product-image" aria-label="Mango Disposable Vape Device">🥭</div>
+        <div class="product-info">
+          <h2 class="product-title">Mango Disposable</h2>
+          <div class="product-price">$22.00</div>
+        </div>
+        <form class="product-actions" aria-label="Select options to add Mango Disposable to cart">
+          <label for="ml-mango" style="display:none">Milliliters</label>
+          <select name="ml" id="ml-mango" aria-hidden="true" disabled>
+            <option selected>2ml</option>
+          </select>
+          <label for="qty-mango" class="sr-only">Quantity</label>
+          <input type="number" id="qty-mango" name="quantity" min="1" value="1" />
+          <button type="submit" class="add-to-cart-btn">Add to Cart</button>
+        </form>
+      </article>
+
+      <article class="product-card" data-name="Sour Apple Disposable" data-type="disposable" data-price="22" data-ml="2" data-ml-amount="0.8">
+        <div class="product-image" aria-label="Sour Apple Disposable Vape Device">🍏</div>
+        <div class="product-info">
+          <h2 class="product-title">Sour Apple Disposable</h2>
+          <div class="product-price">$22.00</div>
+        </div>
+        <form class="product-actions" aria-label="Select options to add Sour Apple Disposable to cart">
+          <label for="ml-sour-apple" style="display:none">Milliliters</label>
+          <select name="ml" id="ml-sour-apple" aria-hidden="true" disabled>
+            <option selected>2ml</option>
+          </select>
+          <label for="qty-sour-apple" class="sr-only">Quantity</label>
+          <input type="number" id="qty-sour-apple" name="quantity" min="1" value="1" />
+          <button type="submit" class="add-to-cart-btn">Add to Cart</button>
+        </form>
+      </article>
     </section>
 
-    <aside class="cart-sidebar" aria-label="Shopping Cart">
+    <!-- Cart sidebar -->
+    <aside class="cart-sidebar" id="cart" aria-label="Shopping cart summary">
       <h2>Your Cart</h2>
-      <div class="cart-items" id="cart-items">
-        <p>Your cart is empty.</p>
-      </div>
-      <div class="cart-total" id="cart-total">Total: $0.00</div>
-      <button class="checkout-btn" id="checkout-btn" disabled>Checkout</button>
+      <div class="cart-items" aria-live="polite" aria-relevant="additions removals"></div>
+      <div class="cart-summary" aria-atomic="true" aria-live="polite"></div>
     </aside>
   </main>
 
-  <section class="reviews-section" aria-label="Product Reviews">
-    <h2>Customer Reviews</h2>
-    <div id="reviews-list">
-      <!-- Reviews inserted here -->
-    </div>
-  </section>
+  <footer>
+    <p>© 2025 V Plug - Vape Store. All rights reserved.</p>
+  </footer>
 
-  <div class="notification" id="notification"></div>
+  <script>
+    const cartItemsEl = document.querySelector('.cart-items');
+    const cartSummaryEl = document.querySelector('.cart-summary');
 
-<script>
-  // Vape Products Data
-  const products = [
-    {
-      id: 101,
-      name: "VapePro X100 Mod",
-      price: 79.99,
-      image: "https://cdn.shopify.com/s/files/1/0281/2659/7614/products/vaporesso-target-pm80-se_1200x1200.jpg"
-    },
-    {
-      id: 102,
-      name: "CloudMaster Pod Kit",
-      price: 49.99,
-      image: "https://vaped.com.ua/image/cache/catalog/product/vape/relx/relx-classic-1000x1000.jpg"
-    },
-    {
-      id: 103,
-      name: "Nicotina Menthol E-liquid 60ml",
-      price: 24.99,
-      image: "https://vapeguide.eu/wp-content/uploads/2020/10/menthol-eliquid-60ml.jpg"
-    },
-    {
-      id: 104,
-      name: "Smooth Tobacco E-liquid 120ml",
-      price: 39.99,
-      image: "https://cdn.shopify.com/s/files/1/0169/6286/products/tobacco-flavor-eliquid_1200x1200.jpg"
-    }
-  ];
+    // Cart state
+    const cart = [];
 
-  // Reviews Data
-  const reviews = [
-    {
-      id: 201,
-      name: "Jake M.",
-      rating: 5,
-      text: "VapePro X100 is the best mod I've ever used—smooth clouds and excellent battery life!"
-    },
-    {
-      id: 202,
-      name: "Samantha K.",
-      rating: 4,
-      text: "CloudMaster Pod is compact and perfect for on-the-go vaping. Flavor is rich and consistent."
-    },
-    {
-      id: 203,
-      name: "Carlos R.",
-      rating: 5,
-      text: "The menthol e-liquid is refreshing and hits perfectly. Highly recommend for menthol lovers!"
-    }
-  ];
-
-  const productsContainer = document.getElementById('products');
-  const cartItemsContainer = document.getElementById('cart-items');
-  const cartCount = document.getElementById('cart-count');
-  const cartTotal = document.getElementById('cart-total');
-  const checkoutBtn = document.getElementById('checkout-btn');
-  const notification = document.getElementById('notification');
-  const reviewsList = document.getElementById('reviews-list');
-
-  let cart = {};
-
-  // Format price as $xx.xx
-  function formatPrice(num) {
-    return `$${num.toFixed(2)}`;
-  }
-
-  // Show notification
-  function showNotification(message) {
-    notification.textContent = message;
-    notification.classList.add('show');
-    setTimeout(() => {
-      notification.classList.remove('show');
-    }, 2500);
-  }
-
-  // Render products
-  function renderProducts() {
-    productsContainer.innerHTML = '';
-    products.forEach(product => {
-      const card = document.createElement('article');
-      card.className = 'product-card';
-      card.innerHTML = `
-        <img class="product-image" src="${product.image}" alt="${product.name}" loading="lazy" />
-        <div class="product-info">
-          <h3>${product.name}</h3>
-          <div class="price">${formatPrice(product.price)}</div>
-          <button class="add-to-cart" data-id="${product.id}">Add to Cart</button>
-        </div>
-      `;
-      productsContainer.appendChild(card);
-    });
-  }
-
-  // Render cart
-  function renderCart() {
-    cartItemsContainer.innerHTML = '';
-    const cartEntries = Object.values(cart);
-
-    if (cartEntries.length === 0) {
-      cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
-      cartCount.textContent = '0';
-      cartTotal.textContent = 'Total: $0.00';
-      checkoutBtn.disabled = true;
-      return;
+    function renderCart() {
+      cartItemsEl.innerHTML = '';
+      let total = 0;
+      if (cart.length === 0) {
+        cartItemsEl.innerHTML = '<p>Your cart is empty.</p>';
+      } else {
+        cart.forEach((item, idx) => {
+          total += item.price * item.quantity;
+          const cartItemEl = document.createElement('div');
+          cartItemEl.className = 'cart-item blue-raz';
+          cartItemEl.innerHTML = `
+            <div class="cart-item-header">
+              <span>${item.name}</span>
+              <button aria-label="Remove ${item.name} from cart" class="remove-btn" data-index="${idx}">&times;</button>
+            </div>
+            <div class="cart-item-details">
+              Quantity: ${item.quantity}<br/>
+              Price: $${item.price.toFixed(2)} each<br/>
+              Total: $${(item.price * item.quantity).toFixed(2)}
+            </div>
+          `;
+          cartItemsEl.appendChild(cartItemEl);
+        });
+      }
+      cartSummaryEl.textContent = `Total: $${total.toFixed(2)}`;
     }
 
-    cartEntries.forEach(item => {
-      const cartItem = document.createElement('div');
-      cartItem.className = 'cart-item';
-      cartItem.innerHTML = `
-        <img src="${item.image}" alt="${item.name}" />
-        <div class="cart-item-info">
-          <h4>${item.name}</h4>
-          <p>Qty: ${item.quantity} × ${formatPrice(item.price)}</p>
-        </div>
-        <div class="cart-item-actions">
-          <button aria-label="Remove ${item.name}" data-id="${item.id}">&times;</button>
-        </div>
-      `;
-      cartItemsContainer.appendChild(cartItem);
+    function addToCart(product, quantity) {
+      const existingIndex = cart.findIndex(item => item.name === product.name);
+      if (existingIndex !== -1) {
+        cart[existingIndex].quantity += quantity;
+      } else {
+        cart.push({...product, quantity});
+      }
+      renderCart();
+    }
+
+    // Attach event listeners to all product forms
+    document.querySelectorAll('.product-actions').forEach(form => {
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        const card = form.closest('.product-card');
+        const name = card.dataset.name;
+        const price = parseFloat(card.dataset.price);
+        const quantity = Math.max(1, parseInt(form.quantity.value) || 1);
+        if (quantity <= 0) return;
+
+        addToCart({ name, price }, quantity);
+
+        // Reset quantity input to 1
+        form.quantity.value = 1;
+      });
     });
 
-    const totalPrice = cartEntries.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    cartCount.textContent = cartEntries.reduce((sum, item) => sum + item.quantity, 0);
-    cartTotal.textContent = `Total: ${formatPrice(totalPrice)}`;
-    checkoutBtn.disabled = false;
-  }
-
-  // Render reviews
-  function renderReviews() {
-    reviewsList.innerHTML = '';
-    reviews.forEach(review => {
-      const reviewDiv = document.createElement('div');
-      reviewDiv.className = 'review';
-      reviewDiv.innerHTML = `
-        <div class="review-header">
-          <span class="reviewer-name">${review.name}</span>
-          <span class="review-rating">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</span>
-        </div>
-        <p class="review-text">${review.text}</p>
-      `;
-      reviewsList.appendChild(reviewDiv);
+    // Remove item from cart
+    cartItemsEl.addEventListener('click', e => {
+      if (e.target.classList.contains('remove-btn')) {
+        const index = parseInt(e.target.dataset.index);
+        if (!isNaN(index)) {
+          cart.splice(index, 1);
+          renderCart();
+        }
+      }
     });
-  }
 
-  // Add to cart handler
-  function addToCart(productId) {
-    const product = products.find(p => p.id == productId);
-    if (!product) return;
-
-    if (cart[productId]) {
-      cart[productId].quantity++;
-    } else {
-      cart[productId] = {...product, quantity: 1};
-    }
+    // Initial render
     renderCart();
-    showNotification(`Added "${product.name}" to cart.`);
-  }
-
-  // Remove from cart handler
-  function removeFromCart(productId) {
-    if (!cart[productId]) return;
-    const productName = cart[productId].name;
-    delete cart[productId];
-    renderCart();
-    showNotification(`Removed "${productName}" from cart.`);
-  }
-
-  // Checkout handler (dummy)
-  function checkout() {
-    if (Object.keys(cart).length === 0) return;
-    showNotification('Checkout is currently not implemented.');
-  }
-
-  // Event Listeners
-  productsContainer.addEventListener('click', e => {
-    if (e.target.classList.contains('add-to-cart')) {
-      addToCart(e.target.dataset.id);
-    }
-  });
-
-  cartItemsContainer.addEventListener('click', e => {
-    if (e.target.tagName === 'BUTTON') {
-      removeFromCart(e.target.dataset.id);
-    }
-  });
-
-  checkoutBtn.addEventListener('click', checkout);
-
-  // Initial render
-  renderProducts();
-  renderCart();
-  renderReviews();
-</script>
-
+  </script>
 </body>
 </html>
