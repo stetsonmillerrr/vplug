@@ -2,982 +2,1136 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <title>💨 Vape Plug</title>
 <style>
-  /* Reset */
-  *, *::before, *::after {
+  /* --- Reset & base --- */
+  * {
     box-sizing: border-box;
   }
   body {
-    margin: 0; padding: 0;
-    background: #121212;
-    color: #eee;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #0e0f17; color: #ddd;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-  a, button {
-    font-family: inherit;
-  }
-  /* Container */
-  .container {
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 12px 16px 32px;
-  }
-  /* Header and Menu Toggle */
-  header {
-    position: sticky;
-    top: 0; left: 0; right: 0;
-    background: rgba(15, 15, 15, 0.95);
-    padding: 12px 16px;
-    border-radius: 0 0 12px 12px;
-    z-index: 100;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    backdrop-filter: blur(10px);
-  }
-  header h1 {
-    margin: 0;
-    font-weight: 700;
-    font-size: 1.8rem;
-    letter-spacing: 0.1em;
-    user-select:none;
-  }
-  #menuToggle {
-    background: none;
-    border: none;
-    color: #eee;
-    font-size: 1.6rem;
-    cursor: pointer;
-    padding: 6px 8px;
-    border-radius: 12px;
-    transition: background 0.3s ease;
-    user-select:none;
-  }
-  #menuToggle:hover {
-    background: rgba(100, 100, 255, 0.3);
-  }
-  nav {
-    position: fixed;
-    top: 56px;
-    right: 0;
-    background: rgba(25, 25, 40, 0.95);
-    width: 220px;
-    height: calc(100vh - 56px);
-    padding: 16px;
-    border-radius: 0 0 0 16px;
-    box-shadow: -4px 0 15px rgba(50, 50, 90, 0.8);
-    transform: translateX(100%);
-    transition: transform 0.3s ease;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    z-index: 150;
   }
-  nav.open {
-    transform: translateX(0);
+  a, button {
+    cursor: pointer;
   }
-  nav button {
-    background: linear-gradient(135deg, #6a5af9, #6ae1f9);
-    border: none;
-    padding: 10px;
+  input, select, button, textarea {
     border-radius: 12px;
-    color: #121212;
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: filter 0.25s ease;
-    user-select:none;
-  }
-  nav button:hover {
-    filter: brightness(1.2);
-  }
-  /* Forms & inputs */
-  label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 600;
-    color: #bbb;
-    user-select:none;
-  }
-  input[type="text"],
-  input[type="number"],
-  input[type="date"],
-  select,
-  textarea {
-    width: 100%;
-    padding: 10px 14px;
-    background: #222;
-    border: 2px solid transparent;
-    border-radius: 16px;
-    color: #eee;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-  }
-  input[type="text"]:focus,
-  input[type="number"]:focus,
-  input[type="date"]:focus,
-  select:focus,
-  textarea:focus {
-    border-color: #6a5af9;
-    outline: none;
-  }
-  /* Semi-transparent dropdown */
-  select {
-    background-color: rgba(255, 255, 255, 0.15);
-  }
-  /* Buttons */
-  button.primary {
-    background: linear-gradient(135deg, #6a5af9, #6ae1f9);
     border: none;
-    color: #121212;
-    font-weight: 700;
-    font-size: 1.1rem;
-    padding: 12px;
-    border-radius: 20px;
+    padding: 12px 14px;
+    margin: 6px 0;
+    font-size: 1rem;
+    outline-offset: 2px;
+    transition: outline-color 0.3s ease;
+    background: #1c1d28;
+    color: #ddd;
     width: 100%;
-    cursor: pointer;
-    box-shadow: 0 6px 8px rgba(106, 90, 249, 0.6);
-    transition: background 0.35s ease, transform 0.2s ease;
+  }
+  input:focus, select:focus, textarea:focus, button:focus {
+    outline: 2px solid #6e56f3;
+    background: #25273f;
+  }
+  button {
+    background: linear-gradient(135deg, #5a46f5, #2b28b7);
+    color: white;
+    font-weight: 600;
+    border-radius: 18px;
+    box-shadow: 0 4px 10px rgb(90 70 245 / 0.6);
+    transition: background 0.4s ease, box-shadow 0.4s ease;
+  }
+  button:hover:not(:disabled) {
+    background: linear-gradient(135deg, #2b28b7, #5a46f5);
+    box-shadow: 0 6px 15px rgb(90 70 245 / 0.8);
+  }
+  button:disabled {
+    opacity: 0.5; cursor: not-allowed;
+  }
+  h1,h2,h3 {
+    margin: 0.2em 0 0.6em 0;
+    font-weight: 700;
     user-select:none;
   }
-  button.primary:hover:not(:disabled) {
-    background: linear-gradient(135deg, #5a4ae6, #5ae0e6);
-    transform: translateY(-2px);
+  ul {
+    padding-left: 18px;
   }
-  button.primary:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-    transform: none;
-    box-shadow: none;
-  }
-  /* Sections */
-  section {
-    margin-top: 28px;
+  /* --- Container --- */
+  #app {
+    flex-grow: 1;
+    max-width: 420px;
+    margin: 0 auto;
     padding: 20px;
-    background: #1c1c2f;
-    border-radius: 24px;
-    box-shadow: 0 4px 14px rgba(58, 58, 92, 0.4);
+    display: flex;
+    flex-direction: column;
   }
-  section h2 {
-    margin-top: 0;
-    font-size: 1.6rem;
-    margin-bottom: 16px;
-    color: #9aa0ff;
+  /* --- Rounded containers --- */
+  .card {
+    background: #171822;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 12px 0;
+    box-shadow:
+      inset 0 0 5px #3a3d6f,
+      0 0 10px rgb(90 70 245 / 0.4);
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: linear-gradient(45deg, #5a46f5, #5537d8, #3f65f5, #7745ff);
+    animation: rotateGrad 8s linear infinite;
+    filter: blur(20px);
+    opacity: 0.35;
+    z-index: 0;
+    border-radius: 30px;
+  }
+  .card > * {
+    position: relative;
+    z-index: 1;
+  }
+  @keyframes rotateGrad {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+  }
+  /* --- Header --- */
+  header {
+    position: sticky;
+    top: 0;
+    background: #141522cc;
+    backdrop-filter: saturate(180%) blur(12px);
+    padding: 12px 20px;
+    border-radius: 0 0 16px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select:none;
+    z-index: 100;
+  }
+  #toggleNavBtn {
+    background: none;
+    border: none;
+    color: #9f9fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    border-radius: 12px;
+    padding: 6px 12px;
+    transition: background 0.3s ease;
+  }
+  #toggleNavBtn:hover {
+    background: #5a46f533;
+  }
+  nav#navMenu {
+    position: fixed;
+    top: 56px; left: 0; right: 0;
+    background: #141522cc;
+    backdrop-filter: saturate(200%) blur(14px);
+    border-radius: 0 0 20px 20px;
+    padding: 14px 24px;
+    display: none;
+    flex-direction: column;
+    gap: 12px;
     user-select:none;
   }
-  /* Cart Items */
-  .order-item {
-    background: #2a2a48;
-    padding: 16px 18px;
-    margin-bottom: 16px;
-    border-radius: 20px;
+  nav#navMenu.active {
+    display: flex;
+  }
+  nav#navMenu button {
+    font-size: 1.1rem;
+    color: #c0c0ff;
+    background: transparent;
+    box-shadow: none;
+    padding: 8px 12px;
+    text-align: left;
+    border-radius: 12px;
+  }
+  nav#navMenu button:hover {
+    background: #5a46f544;
+  }
+  /* --- Main content --- */
+  main {
+    flex-grow: 1;
+    margin-top: 12px;
+  }
+  /* --- Form groups --- */
+  .form-group {
+    margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+  }
+  label {
+    margin-bottom: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #aaaaff;
+  }
+  /* --- Cart --- */
+  #cartList {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 10px 0;
+  }
+  #cartList li {
+    background: #1c1d28;
+    margin-bottom: 10px;
+    padding: 12px 16px;
+    border-radius: 18px;
+    box-shadow: inset 0 0 7px #3a3d6f;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    user-select: none;
-    box-shadow: 0 3px 8px rgba(106, 90, 249, 0.3);
-    transition: background 0.3s ease;
   }
-  .order-item:hover {
-    background: #3a3a68;
-  }
-  .order-item-info {
-    max-width: 68%;
-  }
-  .order-item-info strong {
-    display: block;
-    font-size: 1.2rem;
-    color: #d0d6ff;
-  }
-  .order-item-info small {
-    color: #a0a6ff;
-  }
-  .order-item-qty {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .order-item-qty input {
-    width: 52px;
-    font-weight: 600;
-    text-align: center;
-    border-radius: 14px;
-    font-size: 1rem;
-  }
-  .remove-btn {
-    background: transparent;
-    border: none;
-    color: #ff6161;
+  #cartList li .item-name {
     font-weight: 700;
-    font-size: 1.4rem;
-    cursor: pointer;
-    padding: 6px 10px;
-    border-radius: 14px;
-    transition: background 0.25s ease;
-    user-select:none;
+    color: #b2b2ff;
+    flex-grow: 1;
   }
-  .remove-btn:hover {
-    background: #ff3c3c;
-    color: #fff;
-  }
-  /* Total price */
-  #totalPriceCart {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #d4bfff;
-    text-align: right;
-    margin-top: 18px;
-    user-select:none;
-  }
-  /* Vape Image & error message */
-  #vapeImageWrapper {
-    margin-top: 16px;
-    border-radius: 20px;
-    overflow: hidden;
-    position: relative;
-    height: 240px;
-    background: #333;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 6px 18px rgba(106, 90, 249, 0.4);
-  }
-  #vapeImage {
-    max-width: 100%;
-    max-height: 100%;
-    border-radius: 20px;
-    transition: opacity 0.35s ease;
-    user-select:none;
-  }
-  #image-error-msg {
-    position: absolute;
-    color: #ff5252;
-    font-weight: 700;
-    font-size: 1.1rem;
-    user-select:none;
-  }
-  /* Stars display */
-  .stars-display {
+  #cartList li .qty-controls {
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 1.3rem;
-    color: gold;
-    user-select:none;
   }
-  .stars-display span:first-child,
-  .stars-display span:last-child {
-    color: #bbb;
-    font-weight: 700;
-    font-size: 1.05rem;
-    user-select:none;
+  #cartList li button {
+    padding: 6px 12px;
+    font-size: 1rem;
+    background: linear-gradient(135deg, #6a59f8, #352eaa);
   }
-  /* Review items */
-  .review-item {
-    background: #2a2a48;
-    padding: 14px 16px;
-    margin-bottom: 16px;
-    border-radius: 18px;
-    box-shadow: 0 2px 8px rgba(106, 90, 249, 0.3);
-    position: relative;
-  }
-  .review-item small {
-    display: block;
-    color: #a8aaff;
-    font-weight: 600;
-    margin-bottom: 8px;
-    user-select:none;
-  }
-  .review-text {
-    font-style: italic;
-    color: #ccc;
-    white-space: pre-wrap;
-    user-select:none;
-  }
-  .review-rating {
-    margin-top: 6px;
-    color: gold;
-    user-select:none;
-  }
-  .review-remove-btn {
-    position: absolute;
-    top: 8px;
-    right: 12px;
-    background: transparent;
-    border: none;
-    color: #ff6161;
-    font-weight: 700;
-    cursor: pointer;
-    font-size: 1.2rem;
-    user-select:none;
-  }
-  .review-remove-btn:hover {
-    color: #ff3c3c;
-  }
-  /* Star rating input */
-  .star-rating {
+  /* --- Stars for rating --- */
+  .stars {
     display: flex;
-    gap: 8px;
+    align-items: center;
+    gap: 6px;
     user-select:none;
   }
-  .star-rating input[type="radio"] {
-    display: none;
-  }
-  .star-rating label {
-    font-size: 2rem;
-    color: #555;
+  .star {
+    font-size: 1.8rem;
+    color: #444;
     cursor: pointer;
     transition: color 0.3s ease;
-    user-select:none;
   }
-  .star-rating label:hover,
-  .star-rating label:hover ~ label,
-  .star-rating input[type="radio"]:checked ~ label {
-    color: gold;
+  .star.selected, .star.hovered {
+    color: #6e56f3;
+    text-shadow: 0 0 6px #6e56f3;
   }
-  .star-rating label.reverse {
-    unicode-bidi: bidi-override;
-    direction: rtl;
+  .star.readonly {
+    cursor: default;
   }
-  /* Labels under stars */
-  .star-labels {
+  /* --- Reviews --- */
+  #reviewsList {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  .review {
+    background: #222338;
+    margin-bottom: 10px;
+    border-radius: 18px;
+    padding: 12px 16px;
+    box-shadow: inset 0 0 10px #3a3d6f;
+  }
+  .review-header {
     display: flex;
     justify-content: space-between;
-    font-size: 0.85rem;
-    color: #bbb;
-    margin-top: 4px;
+    align-items: center;
+    font-weight: 700;
+    color: #aabbee;
+  }
+  .review-user {
+    font-style: italic;
+    letter-spacing: 1.5px;
+  }
+  .review-text {
+    margin: 6px 0 0 0;
+    color: #ccc;
+    white-space: pre-wrap;
+  }
+  .remove-review-btn {
+    background: transparent;
+    border: none;
+    color: #ff6666;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: color 0.3s ease;
+  }
+  .remove-review-btn:hover {
+    color: #ff0000;
+  }
+  /* --- Login modal --- */
+  #loginModal {
+    position: fixed;
+    top:0; left:0; right:0; bottom:0;
+    background: rgba(14,15,23,0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+  #loginModal.hidden {
+    display: none;
+  }
+  #loginModal .modal-content {
+    background: #171822;
+    border-radius: 20px;
+    padding: 28px 36px;
+    max-width: 320px;
+    width: 90vw;
+    box-shadow: 0 0 20px #6e56f3aa;
+  }
+  #loginModal h2 {
+    color: #a6a6ff;
+    margin-bottom: 20px;
     user-select:none;
   }
-  /* Dark mode auto */
-  @media (prefers-color-scheme: dark) {
-    body {
-      background: #121212;
-      color: #eee;
-    }
+  #loginModal input {
+    width: 100%;
   }
-  /* Toast notification */
+  #loginModal button {
+    margin-top: 18px;
+    width: 100%;
+  }
+  #loginError {
+    margin-top: 10px;
+    color: #ff6666;
+    font-weight: 700;
+    display: none;
+    user-select:none;
+  }
+  /* --- Notifications / Toast --- */
   #toast {
     position: fixed;
-    bottom: 30px;
-    left: 50%;
+    bottom: 20px; left: 50%;
     transform: translateX(-50%);
-    background: #6a5af9dd;
-    color: white;
-    padding: 14px 28px;
-    border-radius: 20px;
+    background: #5a46f5cc;
+    padding: 12px 20px;
+    border-radius: 30px;
+    color: #fff;
     font-weight: 600;
+    box-shadow: 0 0 20px #5a46f5cc;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.5s ease;
     user-select:none;
-    z-index: 9999;
+    transition: opacity 0.4s ease;
+    z-index: 10000;
   }
   #toast.show {
     opacity: 1;
     pointer-events: auto;
   }
-  /* Image preview in pickup confirmation */
-  #pickupImagePreview {
-    margin-top: 10px;
-    max-width: 100%;
-    border-radius: 18px;
-    box-shadow: 0 4px 14px rgba(106, 90, 249, 0.4);
-  }
-  /* Meetup scheduler */
-  .meetup-controls {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-  .meetup-controls > * {
-    flex: 1 1 140px;
-  }
-  /* Profit display */
-  #profitDisplay {
-    background: #2a2a48;
-    padding: 16px;
+  /* --- Image container --- */
+  #vapeImage {
+    max-width: 120px;
     border-radius: 20px;
-    margin-top: 12px;
-    text-align: center;
-    font-weight: 700;
-    font-size: 1.2rem;
-    color: #aaffaa;
-    user-select:none;
+    box-shadow: 0 0 20px #6e56f3cc inset;
+    margin: 8px auto 12px;
+    display: block;
   }
-  /* Seller info */
-  #sellerInfo {
-    margin-top: 32px;
-    font-size: 1.1rem;
-    font-weight: 700;
-    text-align: center;
-    color: #8a8aff;
+  /* --- Order Status --- */
+  #orderStatusContainer {
+    margin-top: 14px;
+  }
+  #orderStatusPhoto {
+    max-width: 180px;
+    border-radius: 20px;
+    margin-top: 10px;
+    display: block;
+    box-shadow: 0 0 18px #6e56f3cc inset;
+  }
+  /* --- Other text --- */
+  .small-text {
+    font-size: 0.85rem;
+    color: #8888cc;
     user-select:none;
+    margin-top: 6px;
+  }
+  /* --- Smooth animations --- */
+  .fadeIn {
+    animation: fadeIn 0.8s ease forwards;
+  }
+  @keyframes fadeIn {
+    from {opacity:0;}
+    to {opacity:1;}
   }
 </style>
 </head>
 <body>
-
 <header>
-  <h1>💨 Vape Plug</h1>
-  <button id="menuToggle" aria-label="Toggle menu" title="Toggle menu">☰</button>
+  <div style="font-size:1.6rem; font-weight:700; color:#a6a6ff; user-select:none;">💨 Vape Plug</div>
+  <button id="toggleNavBtn" aria-label="Toggle Navigation Menu" aria-expanded="false">☰</button>
 </header>
-
-<nav id="dropdownMenu" aria-hidden="true" tabindex="-1">
-  <button id="menuCloseBtn" aria-label="Close menu" title="Close menu">✕ Close</button>
-  <button id="menuOrder">Place Order</button>
-  <button id="menuReviews">Reviews</button>
-  <button id="menuMeetup">Meetup</button>
-  <button id="menuPickup">Pickup</button>
-  <button id="menuSeller">Seller Info</button>
+<nav id="navMenu" aria-label="Main navigation">
+  <button data-target="shopSection">Shop</button>
+  <button data-target="cartSection">Cart</button>
+  <button data-target="reviewSection">Reviews</button>
+  <button data-target="meetupSection">Meetup</button>
+  <button id="adminPanelBtn">Admin</button>
 </nav>
 
-<div class="container">
-
-  <!-- ORDER SECTION -->
-  <section id="orderSection">
-    <h2>Order Your Vape</h2>
-
-    <label for="vapeSelect">Choose a vape flavor:</label>
-    <select id="vapeSelect" aria-label="Vape flavor select">
-      <option value="" selected disabled>-- Select vape --</option>
-      <option value="PurpleHaze" data-price="25" data-image="https://i.imgur.com/KQcmqL6.png">Purple Haze - $25</option>
-      <option value="MintChill" data-price="20" data-image="https://i.imgur.com/3S3MYWv.png">Mint Chill - $20</option>
-      <option value="StrawberryRush" data-price="22" data-image="https://i.imgur.com/4n6Gdc1.png">Strawberry Rush - $22</option>
-      <option value="BlueberryBlast" data-price="28" data-image="https://i.imgur.com/aI3qFZ6.png">Blueberry Blast - $28</option>
-    </select>
-
-    <div id="vapeImageWrapper" aria-live="polite" aria-atomic="true" aria-label="Selected vape image">
-      <img id="vapeImage" src="" alt="" />
-      <div id="image-error-msg" role="alert" aria-live="assertive" style="display:none;">Image failed to load</div>
+<main id="app" role="main" aria-live="polite" aria-atomic="true">
+  <!-- SHOP -->
+  <section id="shopSection" class="card fadeIn" aria-label="Shop Section">
+    <h2>Choose Your Vape</h2>
+    <img id="vapeImage" src="https://mipod.com/cdn/shop/files/Raz_Tn9000_Blue-Razz-Ice-A1_600x600_301ec6b8-7092-48b0-a835-d79222491c25.png?v=1700249533" alt="Raz Blue Razz Vape" />
+    <div class="form-group">
+      <label for="brandSelect">Brand</label>
+      <select id="brandSelect" aria-describedby="brandHelp">
+        <option value="raz">Raz</option>
+      </select>
+      <small id="brandHelp" class="small-text">Only one brand available.</small>
     </div>
-
-    <label for="quantityInput">Quantity:</label>
-    <input type="number" id="quantityInput" min="1" max="10" value="1" aria-label="Quantity input" />
-
-    <button id="addToCartBtn" class="primary" disabled>Add to Cart</button>
-
-    <div id="cartList" aria-live="polite" aria-atomic="true" style="margin-top: 24px;"></div>
-
-    <div id="totalPriceCart" aria-live="polite" aria-atomic="true">Total: $0.00</div>
+    <div class="form-group">
+      <label for="flavorSelect">Flavor</label>
+      <select id="flavorSelect" aria-describedby="flavorHelp">
+        <option value="blueRazz">Blue Raz</option>
+      </select>
+      <small id="flavorHelp" class="small-text">Only one flavor available.</small>
+    </div>
+    <div class="form-group">
+      <label for="priceDisplay">Estimated Price</label>
+      <input id="priceDisplay" type="text" readonly aria-readonly="true" />
+    </div>
+    <button id="addToCartBtn" aria-label="Add selected vape to cart">Add to Cart</button>
   </section>
 
-  <!-- REVIEW SECTION -->
-  <section id="reviewSection" hidden>
-    <h2>Customer Reviews</h2>
-
-    <label for="reviewerNameInput">Your Name (or nickname):</label>
-    <input type="text" id="reviewerNameInput" maxlength="25" placeholder="Anonymous" aria-label="Reviewer name input" />
-
-    <label for="reviewTextInput">Your Review:</label>
-    <textarea id="reviewTextInput" rows="4" maxlength="280" placeholder="Write your review here..." aria-label="Review text input"></textarea>
-
-    <label>Rate this shop:</label>
-    <div class="star-rating" aria-label="Star rating input">
-      <input type="radio" id="star5" name="rating" value="5" />
-      <label for="star5" title="5 stars">★</label>
-      <input type="radio" id="star4" name="rating" value="4" />
-      <label for="star4" title="4 stars">★</label>
-      <input type="radio" id="star3" name="rating" value="3" />
-      <label for="star3" title="3 stars">★</label>
-      <input type="radio" id="star2" name="rating" value="2" />
-      <label for="star2" title="2 stars">★</label>
-      <input type="radio" id="star1" name="rating" value="1" />
-      <label for="star1" title="1 star">★</label>
+  <!-- CART -->
+  <section id="cartSection" class="card fadeIn" aria-label="Shopping Cart" hidden>
+    <h2>Your Cart</h2>
+    <ul id="cartList" aria-live="polite" aria-atomic="true"></ul>
+    <div class="form-group">
+      <label for="buyerName">Your Name</label>
+      <input id="buyerName" type="text" placeholder="Enter your name" aria-required="true" />
     </div>
-    <div class="star-labels" aria-hidden="true">
-      <span>1</span>
-      <span>★★★★★</span>
-      <span>5</span>
+    <div class="form-group">
+      <label for="meetupLocation">Meetup Location</label>
+      <input id="meetupLocation" type="text" placeholder="Where to meet?" aria-required="true" />
     </div>
-
-    <button id="submitReviewBtn" class="primary" disabled>Submit Review</button>
-
-    <div id="reviewsList" aria-live="polite" aria-atomic="true" style="margin-top: 24px;"></div>
-  </section>
-
-  <!-- MEETUP SECTION -->
-  <section id="meetupSection" hidden>
-    <h2>Meetup Scheduler</h2>
-    <div class="meetup-controls">
-      <label for="meetupDateInput">Set meetup date:</label>
-      <input type="date" id="meetupDateInput" aria-label="Meetup date input" />
-      <button id="setMeetupDateBtn" class="primary">Set Date</button>
+    <div class="form-group">
+      <label for="scheduledDate">Preferred Meetup Date</label>
+      <input id="scheduledDate" type="date" />
     </div>
-
-    <div id="meetupStatus" style="margin-top: 16px;"></div>
-
-    <div id="meetupActions" style="margin-top: 12px; display:none;">
-      <p>Do you accept this meetup date?</p>
-      <button id="acceptMeetupBtn" class="primary">Accept</button>
-      <button id="suggestNewDateBtn" class="primary">Suggest New Date</button>
-      <input type="date" id="suggestedDateInput" style="margin-top:10px; display:none;" aria-label="Suggest new meetup date" />
-      <button id="submitSuggestedDateBtn" class="primary" style="margin-top:10px; display:none;">Submit Suggestion</button>
+    <button id="placeOrderBtn" aria-label="Place your order">Place Order</button>
+    <div id="orderStatusContainer" hidden>
+      <strong>Order Status:</strong>
+      <div id="orderStatusText" style="margin-top:6px;"></div>
+      <img id="orderStatusPhoto" alt="Order status photo" hidden />
     </div>
   </section>
 
-  <!-- PICKUP SECTION -->
-  <section id="pickupSection" hidden>
-    <h2>Pickup Confirmation</h2>
-    <p>Upload a photo when you pick up your order, and confirm you received it.</p>
-    <input type="file" id="pickupPhotoInput" accept="image/*" aria-label="Upload pickup photo" />
-    <img id="pickupImagePreview" alt="Pickup photo preview" hidden />
-    <div style="margin-top: 12px;">
-      <button id="confirmPickupBtn" class="primary" disabled>Confirm Pickup</button>
-    </div>
+  <!-- REVIEWS -->
+  <section id="reviewSection" class="card fadeIn" aria-label="Reviews Section" hidden>
+    <h2>Reviews & Ratings</h2>
+    <form id="reviewForm" aria-describedby="reviewDesc">
+      <div class="form-group">
+        <label for="reviewerName">Your Name (first letter only will show)</label>
+        <input id="reviewerName" type="text" placeholder="Your name or nickname" aria-required="true" maxlength="20" />
+      </div>
+      <div class="form-group">
+        <label>Rate Service Quality</label>
+        <div id="serviceStars" class="stars" role="radiogroup" aria-label="Service quality rating">
+          <span tabindex="0" role="radio" aria-checked="false" class="star" data-value="1" aria-label="1 star">★</span>
+          <span tabindex="-1" role="radio" aria-checked="false" class="star" data-value="2" aria-label="2 stars">★</span>
+          <span tabindex="-1" role="radio" aria-checked="false" class="star" data-value="3" aria-label="3 stars">★</span>
+          <span tabindex="-1" role="radio" aria-checked="false" class="star" data-value="4" aria-label="4 stars">★</span>
+          <span tabindex="-1" role="radio" aria-checked="false" class="star" data-value="5" aria-label="5 stars">★</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="reviewText">Your Review</label>
+        <textarea id="reviewText" rows="4" placeholder="Write your review here..." aria-required="true"></textarea>
+      </div>
+      <button id="submitReviewBtn" type="submit" aria-label="Submit your review">Submit Review</button>
+    </form>
+    <h3>All Reviews</h3>
+    <div id="reviewsList" role="list" aria-live="polite" aria-atomic="true"></div>
   </section>
 
-  <!-- SELLER INFO -->
-  <section id="sellerInfoSection" hidden>
-    <h2>Seller Info</h2>
-    <div id="sellerInfo">ifykyk🤫</div>
+  <!-- MEETUP FEEDBACK -->
+  <section id="meetupSection" class="card fadeIn" aria-label="Meetup Section" hidden>
+    <h2>Meetup Date Requests & Feedback</h2>
+    <div id="meetupRequests" role="list" aria-live="polite"></div>
+    <form id="meetupFeedbackForm" aria-describedby="meetupDesc" style="margin-top:20px;">
+      <div class="form-group">
+        <label for="meetupNameInput">Your Name</label>
+        <input id="meetupNameInput" type="text" placeholder="Name" aria-required="true" />
+      </div>
+      <div class="form-group">
+        <label for="meetupResponseInput">Are you available on selected meetup date?</label>
+        <select id="meetupResponseInput" aria-required="true">
+          <option value="">-- Select --</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+          <option value="maybe">Maybe</option>
+        </select>
+      </div>
+      <button id="submitMeetupFeedback" type="submit">Send Feedback</button>
+    </form>
   </section>
 
-  <!-- Profit display, only visible for your IP -->
-  <div id="profitDisplay" hidden>Profit: $0.00</div>
+  <!-- ADMIN DASHBOARD -->
+  <section id="adminDashboard" class="card fadeIn" aria-label="Admin Dashboard" hidden>
+    <h2>Admin Dashboard</h2>
+    <button id="logoutAdminBtn" style="margin-bottom: 12px;">Logout</button>
+    <h3>Orders (Pending / Fulfilled)</h3>
+    <div id="adminOrdersList" role="list" style="max-height: 220px; overflow-y: auto;"></div>
+    <h3>Profit</h3>
+    <div id="profitDisplay" style="font-weight:700; font-size:1.2rem; color:#a6a6ff; margin-bottom: 16px;">$0</div>
+    <h3>Reviews Management</h3>
+    <div id="adminReviewsList" role="list" style="max-height: 200px; overflow-y: auto;"></div>
+  </section>
+</main>
 
+<!-- LOGIN MODAL -->
+<div id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginTitle" class="hidden">
+  <div class="modal-content">
+    <h2 id="loginTitle">Admin Login</h2>
+    <input id="adminUsername" type="text" placeholder="Username" aria-label="Admin username" />
+    <input id="adminPassword" type="password" placeholder="Password" aria-label="Admin password" />
+    <button id="loginBtn">Login</button>
+    <div id="loginError" role="alert">Invalid credentials!</div>
+  </div>
 </div>
 
-<!-- Toast notifications -->
+<!-- Toast Notification -->
 <div id="toast" role="alert" aria-live="assertive" aria-atomic="true"></div>
 
 <script>
 (() => {
-  // DOM elements
-  const menuToggle = document.getElementById('menuToggle');
-  const dropdownMenu = document.getElementById('dropdownMenu');
-  const menuCloseBtn = document.getElementById('menuCloseBtn');
-  const menuOrderBtn = document.getElementById('menuOrder');
-  const menuReviewsBtn = document.getElementById('menuReviews');
-  const menuMeetupBtn = document.getElementById('menuMeetup');
-  const menuPickupBtn = document.getElementById('menuPickup');
-  const menuSellerBtn = document.getElementById('menuSeller');
+  // Constants and initial data
+  const BRAND = "Raz";
+  const FLAVOR = "Blue Raz";
+  const PRICE_BASE = 40; // $40 base per vape unit
+  const TAX_PER_UNIT = 5; // $5 tax per vape
+  const ADMIN_USERNAME = "Admin";
+  const ADMIN_PASSWORD = "Ha676543";
 
-  const orderSection = document.getElementById('orderSection');
+  // Elements refs
+  const navBtn = document.getElementById('toggleNavBtn');
+  const navMenu = document.getElementById('navMenu');
+  const shopSection = document.getElementById('shopSection');
+  const cartSection = document.getElementById('cartSection');
   const reviewSection = document.getElementById('reviewSection');
   const meetupSection = document.getElementById('meetupSection');
-  const pickupSection = document.getElementById('pickupSection');
-  const sellerInfoSection = document.getElementById('sellerInfoSection');
+  const adminDashboard = document.getElementById('adminDashboard');
+  const adminPanelBtn = document.getElementById('adminPanelBtn');
 
-  const vapeSelect = document.getElementById('vapeSelect');
-  const vapeImage = document.getElementById('vapeImage');
-  const vapeImageWrapper = document.getElementById('vapeImageWrapper');
-  const imageErrorMsg = document.getElementById('image-error-msg');
-  const quantityInput = document.getElementById('quantityInput');
+  const priceDisplay = document.getElementById('priceDisplay');
   const addToCartBtn = document.getElementById('addToCartBtn');
+
   const cartList = document.getElementById('cartList');
-  const totalPriceCart = document.getElementById('totalPriceCart');
+  const buyerNameInput = document.getElementById('buyerName');
+  const meetupLocationInput = document.getElementById('meetupLocation');
+  const scheduledDateInput = document.getElementById('scheduledDate');
+  const placeOrderBtn = document.getElementById('placeOrderBtn');
 
-  const reviewerNameInput = document.getElementById('reviewerNameInput');
-  const reviewTextInput = document.getElementById('reviewTextInput');
-  const submitReviewBtn = document.getElementById('submitReviewBtn');
+  const reviewForm = document.getElementById('reviewForm');
+  const reviewerNameInput = document.getElementById('reviewerName');
+  const reviewTextInput = document.getElementById('reviewText');
+  const serviceStarsContainer = document.getElementById('serviceStars');
   const reviewsList = document.getElementById('reviewsList');
-  const starRadios = Array.from(document.querySelectorAll('.star-rating input[type="radio"]'));
 
-  const meetupDateInput = document.getElementById('meetupDateInput');
-  const setMeetupDateBtn = document.getElementById('setMeetupDateBtn');
-  const meetupStatus = document.getElementById('meetupStatus');
-  const meetupActions = document.getElementById('meetupActions');
-  const acceptMeetupBtn = document.getElementById('acceptMeetupBtn');
-  const suggestNewDateBtn = document.getElementById('suggestNewDateBtn');
-  const suggestedDateInput = document.getElementById('suggestedDateInput');
-  const submitSuggestedDateBtn = document.getElementById('submitSuggestedDateBtn');
+  const meetupRequestsDiv = document.getElementById('meetupRequests');
+  const meetupFeedbackForm = document.getElementById('meetupFeedbackForm');
+  const meetupNameInput = document.getElementById('meetupNameInput');
+  const meetupResponseInput = document.getElementById('meetupResponseInput');
+  const submitMeetupFeedbackBtn = document.getElementById('submitMeetupFeedback');
 
-  const pickupPhotoInput = document.getElementById('pickupPhotoInput');
-  const pickupImagePreview = document.getElementById('pickupImagePreview');
-  const confirmPickupBtn = document.getElementById('confirmPickupBtn');
+  const loginModal = document.getElementById('loginModal');
+  const loginBtn = document.getElementById('loginBtn');
+  const adminUsernameInput = document.getElementById('adminUsername');
+  const adminPasswordInput = document.getElementById('adminPassword');
+  const loginError = document.getElementById('loginError');
 
+  const adminOrdersList = document.getElementById('adminOrdersList');
   const profitDisplay = document.getElementById('profitDisplay');
+  const adminReviewsList = document.getElementById('adminReviewsList');
+  const logoutAdminBtn = document.getElementById('logoutAdminBtn');
 
-  const toast = document.getElementById('toast');
+  const orderStatusContainer = document.getElementById('orderStatusContainer');
+  const orderStatusText = document.getElementById('orderStatusText');
+  const orderStatusPhoto = document.getElementById('orderStatusPhoto');
 
-  // Constants
-  const TAX_PER_ITEM = 5.00;
-  const YOUR_IP = '127.0.0.1'; // Replace this with your actual IP for profit visibility
-  let visitorIP = null;
-
-  // Storage Keys
-  const CART_STORAGE_KEY = 'vapePlugCart';
-  const REVIEWS_STORAGE_KEY = 'vapePlugReviews';
-  const RATING_STORAGE_KEY = 'vapePlugUserRating';
-  const MEETUP_STORAGE_KEY = 'vapePlugMeetup';
-  const PICKUP_STORAGE_KEY = 'vapePlugPickup';
-
-  // State
+  // State variables
   let cart = [];
-  let reviews = [];
-  let userRating = null;
-  let meetupData = null;
-  let pickupData = null;
+  let orders = JSON.parse(localStorage.getItem('orders')) || [];
+  let reviews = JSON.parse(localStorage.getItem('reviews')) || [];
+  let meetupFeedbacks = JSON.parse(localStorage.getItem('meetupFeedbacks')) || [];
+  let loggedIn = false;
 
-  // --- Utility functions ---
+  // Accessibility helpers for stars rating
+  let currentRating = 0;
 
-  function toastMessage(msg) {
+  // Toggle nav menu
+  navBtn.addEventListener('click', () => {
+    const expanded = navBtn.getAttribute('aria-expanded') === 'true';
+    navBtn.setAttribute('aria-expanded', !expanded);
+    navMenu.classList.toggle('active');
+  });
+
+  // Nav menu buttons scroll
+  navMenu.querySelectorAll('button[data-target]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.getAttribute('data-target');
+      showSection(targetId);
+      navMenu.classList.remove('active');
+      navBtn.setAttribute('aria-expanded', false);
+    });
+  });
+
+  // Show section function
+  function showSection(id) {
+    [shopSection, cartSection, reviewSection, meetupSection, adminDashboard].forEach(section => {
+      if(section.id === id) section.hidden = false;
+      else section.hidden = true;
+    });
+  }
+  // Default show shop
+  showSection('shopSection');
+
+  // Price display update
+  function updatePrice() {
+    let quantity = 1; // default 1 for shop screen
+    if(cart.length > 0) quantity = cart.reduce((acc, c) => acc + c.qty, 0);
+    const baseTotal = PRICE_BASE * quantity;
+    const taxTotal = TAX_PER_UNIT * quantity;
+    const total = baseTotal + taxTotal;
+    priceDisplay.value = `$${total.toFixed(2)} (Includes $${taxTotal} tax)`;
+  }
+  updatePrice();
+
+  // Add to cart
+  addToCartBtn.addEventListener('click', () => {
+    // Check if item already in cart (only one item type supported)
+    const existingItemIndex = cart.findIndex(item => item.brand === BRAND && item.flavor === FLAVOR);
+    if(existingItemIndex >= 0) {
+      cart[existingItemIndex].qty++;
+    } else {
+      cart.push({ brand: BRAND, flavor: FLAVOR, qty: 1, basePrice: PRICE_BASE });
+    }
+    updateCartUI();
+    updatePrice();
+    showSection('cartSection');
+  });
+
+  // Update cart UI
+  function updateCartUI() {
+    if(cart.length === 0) {
+      cartList.innerHTML = '<li>Your cart is empty.</li>';
+      return;
+    }
+    cartList.innerHTML = '';
+    cart.forEach((item, idx) => {
+      const li = document.createElement('li');
+      li.setAttribute('role', 'listitem');
+      li.innerHTML = `
+        <div class="item-name">${item.brand} - ${item.flavor}</div>
+        <div class="qty-controls" aria-label="Quantity controls for ${item.brand} ${item.flavor}">
+          <button aria-label="Decrease quantity" data-idx="${idx}" class="decreaseQtyBtn">−</button>
+          <div aria-live="polite" aria-atomic="true" style="min-width:28px; text-align:center;">${item.qty}</div>
+          <button aria-label="Increase quantity" data-idx="${idx}" class="increaseQtyBtn">+</button>
+        </div>
+      `;
+      cartList.appendChild(li);
+    });
+
+    // Attach quantity button listeners
+    cartList.querySelectorAll('.decreaseQtyBtn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = Number(btn.dataset.idx);
+        if(cart[idx].qty > 1) {
+          cart[idx].qty--;
+        } else {
+          cart.splice(idx,1);
+        }
+        updateCartUI();
+        updatePrice();
+      });
+    });
+    cartList.querySelectorAll('.increaseQtyBtn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = Number(btn.dataset.idx);
+        cart[idx].qty++;
+        updateCartUI();
+        updatePrice();
+      });
+    });
+  }
+
+  updateCartUI();
+
+  // Place order
+  placeOrderBtn.addEventListener('click', () => {
+    const buyerName = buyerNameInput.value.trim();
+    const meetupLocation = meetupLocationInput.value.trim();
+    const scheduledDate = scheduledDateInput.value;
+
+    if(cart.length === 0) {
+      alert("Your cart is empty.");
+      return;
+    }
+    if(!buyerName) {
+      alert("Please enter your name.");
+      return;
+    }
+    if(!meetupLocation) {
+      alert("Please enter meetup location.");
+      return;
+    }
+
+    // Create order object
+    const order = {
+      id: Date.now(),
+      buyerName,
+      meetupLocation,
+      scheduledDate,
+      items: JSON.parse(JSON.stringify(cart)),
+      status: 'Pending',
+      orderDate: new Date().toISOString(),
+      orderPhoto: null
+    };
+
+    orders.push(order);
+    localStorage.setItem('orders', JSON.stringify(orders));
+
+    // Clear cart and inputs
+    cart = [];
+    updateCartUI();
+    updatePrice();
+    buyerNameInput.value = '';
+    meetupLocationInput.value = '';
+    scheduledDateInput.value = '';
+    orderStatusContainer.hidden = true;
+
+    // Show order placed notification
+    showToast("Order placed successfully! We'll contact you.");
+
+    // Show meetup requests updated
+    renderMeetupRequests();
+
+    // Show shop again
+    showSection('shopSection');
+  });
+
+  // Toast helper
+  const toast = document.getElementById('toast');
+  let toastTimeout;
+  function showToast(msg) {
     toast.textContent = msg;
     toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2800);
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3500);
   }
 
-  function formatPrice(val) {
-    return `$${val.toFixed(2)}`;
-  }
-
-  function saveToStorage(key, val) {
-    try {
-      localStorage.setItem(key, JSON.stringify(val));
-    } catch {
-      // storage might be full or not available
-    }
-  }
-
-  function loadFromStorage(key, fallback) {
-    try {
-      const raw = localStorage.getItem(key);
-      if(raw) return JSON.parse(raw);
-    } catch {}
-    return fallback;
-  }
-
-  function calcTotal() {
-    let sum = 0;
-    cart.forEach(item => {
-      const price = parseFloat(item.price);
-      const qty = parseInt(item.qty);
-      sum += (price + TAX_PER_ITEM) * qty;
+  // Reviews star rating - keyboard & mouse
+  let serviceRating = 0;
+  const stars = [...serviceStarsContainer.querySelectorAll('.star')];
+  stars.forEach((star, idx) => {
+    star.addEventListener('click', () => {
+      setRating(idx + 1);
     });
-    return sum;
+    star.addEventListener('keydown', e => {
+      if(e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        let next = Math.min(serviceRating + 1, 5);
+        setRating(next);
+        stars[next - 1].focus();
+      } else if(e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        let prev = Math.max(serviceRating - 1, 1);
+        setRating(prev);
+        stars[prev - 1].focus();
+      } else if(e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        setRating(idx + 1);
+      }
+    });
+    star.addEventListener('mouseover', () => {
+      highlightStars(idx + 1);
+    });
+    star.addEventListener('mouseout', () => {
+      highlightStars(serviceRating);
+    });
+  });
+  function setRating(val) {
+    serviceRating = val;
+    stars.forEach((star, i) => {
+      star.classList.toggle('selected', i < serviceRating);
+      star.setAttribute('aria-checked', i < serviceRating ? 'true' : 'false');
+      star.tabIndex = i === serviceRating - 1 ? 0 : -1;
+    });
   }
-
-  // --- Dropdown menu toggling ---
-  function openMenu() {
-    dropdownMenu.classList.add('open');
-    dropdownMenu.setAttribute('aria-hidden', 'false');
-    dropdownMenu.focus();
+  function highlightStars(val) {
+    stars.forEach((star,i) => {
+      star.classList.toggle('hovered', i < val);
+    });
   }
-  function closeMenu() {
-    dropdownMenu.classList.remove('open');
-    dropdownMenu.setAttribute('aria-hidden', 'true');
-    menuToggle.focus();
-  }
+  setRating(0);
 
-  menuToggle.addEventListener('click', () => {
-    if (dropdownMenu.classList.contains('open')) closeMenu();
-    else openMenu();
-  });
-  menuCloseBtn.addEventListener('click', closeMenu);
-
-  // Menu nav buttons
-  menuOrderBtn.addEventListener('click', () => {
-    showSection('order');
-    closeMenu();
-  });
-  menuReviewsBtn.addEventListener('click', () => {
-    showSection('reviews');
-    closeMenu();
-  });
-  menuMeetupBtn.addEventListener('click', () => {
-    showSection('meetup');
-    closeMenu();
-  });
-  menuPickupBtn.addEventListener('click', () => {
-    showSection('pickup');
-    closeMenu();
-  });
-  menuSellerBtn.addEventListener('click', () => {
-    showSection('seller');
-    closeMenu();
-  });
-
-  // Section visibility helper
-  function showSection(name) {
-    orderSection.hidden = true;
-    reviewSection.hidden = true;
-    meetupSection.hidden = true;
-    pickupSection.hidden = true;
-    sellerInfoSection.hidden = true;
-    if(name==='order') orderSection.hidden = false;
-    else if(name==='reviews') reviewSection.hidden = false;
-    else if(name==='meetup') meetupSection.hidden = false;
-    else if(name==='pickup') pickupSection.hidden = false;
-    else if(name==='seller') sellerInfoSection.hidden = false;
-  }
-
-  // Show order section by default
-  showSection('order');
-
-  // --- Vape selection & image ---
-  vapeSelect.addEventListener('change', () => {
-    const opt = vapeSelect.selectedOptions[0];
-    if(!opt) {
-      vapeImage.src = '';
-      vapeImage.alt = '';
-      imageErrorMsg.style.display = 'none';
-      addToCartBtn.disabled = true;
+  // Submit review form
+  reviewForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = reviewerNameInput.value.trim();
+    const reviewText = reviewTextInput.value.trim();
+    if(name.length === 0 || reviewText.length === 0 || serviceRating === 0) {
+      alert("Please fill your name, review and select rating.");
       return;
     }
-    const imgSrc = opt.getAttribute('data-image');
-    const vapeName = opt.textContent;
-    vapeImage.style.opacity = '0';
-    imageErrorMsg.style.display = 'none';
 
-    vapeImage.onload = () => {
-      vapeImage.style.opacity = '1';
-      imageErrorMsg.style.display = 'none';
-    };
-    vapeImage.onerror = () => {
-      imageErrorMsg.style.display = 'block';
-      vapeImage.style.opacity = '0';
-    };
-    vapeImage.src = imgSrc;
-    vapeImage.alt = vapeName;
+    // Mask name to first letter and stars
+    const maskedName = name[0].toUpperCase() + '...';
 
-    addToCartBtn.disabled = false;
-  });
-
-  // Enable/disable add to cart based on quantity
-  quantityInput.addEventListener('input', () => {
-    const val = parseInt(quantityInput.value);
-    if (isNaN(val) || val < 1) {
-      quantityInput.value = 1;
-      addToCartBtn.disabled = true;
-    } else if(vapeSelect.value) {
-      addToCartBtn.disabled = false;
-    }
-  });
-
-  // Add to cart button
-  addToCartBtn.addEventListener('click', () => {
-    const opt = vapeSelect.selectedOptions[0];
-    if(!opt) return toastMessage('Select a vape first!');
-    let qty = parseInt(quantityInput.value);
-    if (isNaN(qty) || qty < 1) qty = 1;
-
-    const vapeName = opt.textContent;
-    const price = parseFloat(opt.getAttribute('data-price'));
-    const image = opt.getAttribute('data-image');
-    // Check if already in cart
-    const existingIndex = cart.findIndex(item => item.name === vapeName);
-    if(existingIndex !== -1) {
-      cart[existingIndex].qty += qty;
-    } else {
-      cart.push({ name: vapeName, price, qty, image });
-    }
-    saveToStorage(CART_STORAGE_KEY, cart);
-    renderCart();
-    toastMessage('Added to cart!');
-  });
-
-  // Render cart
-  function renderCart() {
-    if(cart.length === 0) {
-      cartList.innerHTML = '<em>Your cart is empty.</em>';
-      totalPriceCart.textContent = 'Total: $0.00';
-      return;
-    }
-    let html = '';
-    cart.forEach((item, idx) => {
-      html += `
-        <div class="cart-item" role="listitem" aria-label="${item.name}, quantity ${item.qty}, price ${formatPrice(item.price)} each">
-          <img src="${item.image}" alt="${item.name} image" width="60" height="60" />
-          <div>
-            <div><strong>${item.name}</strong></div>
-            <div>Qty: ${item.qty}</div>
-            <div>Price: ${formatPrice(item.price)}</div>
-            <div>Tax: $${TAX_PER_ITEM.toFixed(2)}</div>
-          </div>
-          <button aria-label="Remove ${item.name} from cart" data-index="${idx}" class="remove-cart-btn">✕</button>
-        </div>
-      `;
-    });
-    cartList.innerHTML = html;
-    const total = calcTotal();
-    totalPriceCart.textContent = `Total: ${formatPrice(total)}`;
-
-    // Remove button listeners
-    const removeBtns = document.querySelectorAll('.remove-cart-btn');
-    removeBtns.forEach(btn => {
-      btn.onclick = () => {
-        const idx = parseInt(btn.getAttribute('data-index'));
-        if (!isNaN(idx)) {
-          cart.splice(idx, 1);
-          saveToStorage(CART_STORAGE_KEY, cart);
-          renderCart();
-          toastMessage('Item removed from cart');
-        }
-      };
-    });
-  }
-
-  // Load cart from storage
-  cart = loadFromStorage(CART_STORAGE_KEY, []);
-  renderCart();
-
-  // --- Review submission ---
-  // Enable submit button only when name, review, and rating present
-  function updateReviewSubmitState() {
-    const nameVal = reviewerNameInput.value.trim();
-    const reviewVal = reviewTextInput.value.trim();
-    const ratingVal = starRadios.find(r => r.checked)?.value;
-    submitReviewBtn.disabled = !(nameVal && reviewVal && ratingVal);
-  }
-  reviewerNameInput.addEventListener('input', updateReviewSubmitState);
-  reviewTextInput.addEventListener('input', updateReviewSubmitState);
-  starRadios.forEach(r => r.addEventListener('change', updateReviewSubmitState));
-
-  submitReviewBtn.addEventListener('click', () => {
-    const nameVal = reviewerNameInput.value.trim() || 'Anonymous';
-    const reviewVal = reviewTextInput.value.trim();
-    const ratingVal = starRadios.find(r => r.checked)?.value || 0;
-
-    if(!reviewVal || !ratingVal) return;
-
-    // Add review
     reviews.push({
-      name: nameVal,
-      review: reviewVal,
-      rating: parseInt(ratingVal),
-      timestamp: Date.now()
+      id: Date.now(),
+      name: maskedName,
+      text: reviewText,
+      rating: serviceRating,
+      date: new Date().toISOString()
     });
-    saveToStorage(REVIEWS_STORAGE_KEY, reviews);
-    renderReviews();
-    toastMessage('Review submitted!');
+    localStorage.setItem('reviews', JSON.stringify(reviews));
 
-    // Reset form
     reviewerNameInput.value = '';
     reviewTextInput.value = '';
-    starRadios.forEach(r => r.checked = false);
-    submitReviewBtn.disabled = true;
+    setRating(0);
+
+    renderReviews();
+    showToast("Thank you for your review!");
   });
 
-  // Render reviews
+  // Render reviews list
   function renderReviews() {
     if(reviews.length === 0) {
-      reviewsList.innerHTML = '<em>No reviews yet.</em>';
+      reviewsList.innerHTML = '<p>No reviews yet.</p>';
       return;
     }
-    const sorted = reviews.slice().sort((a,b) => b.timestamp - a.timestamp);
-    let html = '';
-    sorted.forEach((r, idx) => {
-      html += `
-        <div class="review-item" role="article" aria-label="Review by ${r.name}">
-          <small>${r.name} — ${new Date(r.timestamp).toLocaleString()}</small>
-          <div class="review-text">${r.review}</div>
-          <div class="review-rating" aria-label="Rating: ${r.rating} stars">${'★'.repeat(r.rating)}</div>
-        </div>
+    reviewsList.innerHTML = '';
+    reviews.forEach(r => {
+      const div = document.createElement('div');
+      div.className = 'review-card';
+      div.setAttribute('role', 'listitem');
+      div.innerHTML = `
+        <div><strong>${r.name}</strong> — <small>${new Date(r.date).toLocaleDateString()}</small></div>
+        <div aria-label="Rating: ${r.rating} out of 5 stars" role="img">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+        <p>${r.text}</p>
       `;
+      reviewsList.appendChild(div);
     });
-    reviewsList.innerHTML = html;
   }
-
-  reviews = loadFromStorage(REVIEWS_STORAGE_KEY, []);
   renderReviews();
 
-  // --- Meetup scheduler ---
-  setMeetupDateBtn.addEventListener('click', () => {
-    const dateVal = meetupDateInput.value;
-    if(!dateVal) return toastMessage('Please select a date first.');
-    meetupData = { proposedDate: dateVal, accepted: false };
-    saveToStorage(MEETUP_STORAGE_KEY, meetupData);
-    meetupStatus.textContent = `Meetup date proposed: ${dateVal}`;
-    meetupActions.style.display = 'block';
-  });
-
-  acceptMeetupBtn.addEventListener('click', () => {
-    if(!meetupData) return;
-    meetupData.accepted = true;
-    saveToStorage(MEETUP_STORAGE_KEY, meetupData);
-    meetupStatus.textContent = `Meetup date accepted: ${meetupData.proposedDate}`;
-    meetupActions.style.display = 'none';
-  });
-
-  suggestNewDateBtn.addEventListener('click', () => {
-    suggestedDateInput.style.display = 'block';
-    submitSuggestedDateBtn.style.display = 'inline-block';
-  });
-
-  submitSuggestedDateBtn.addEventListener('click', () => {
-    const newDate = suggestedDateInput.value;
-    if(!newDate) return toastMessage('Please select a suggested date.');
-    meetupData = { proposedDate: newDate, accepted: false };
-    saveToStorage(MEETUP_STORAGE_KEY, meetupData);
-    meetupStatus.textContent = `New meetup date proposed: ${newDate}`;
-    suggestedDateInput.style.display = 'none';
-    submitSuggestedDateBtn.style.display = 'none';
-  });
-
-  meetupData = loadFromStorage(MEETUP_STORAGE_KEY, null);
-  if(meetupData) {
-    meetupStatus.textContent = meetupData.accepted ?
-      `Meetup date accepted: ${meetupData.proposedDate}` :
-      `Meetup date proposed: ${meetupData.proposedDate}`;
-    meetupActions.style.display = meetupData.accepted ? 'none' : 'block';
-  }
-
-  // --- Pickup confirmation ---
-  pickupPhotoInput.addEventListener('change', () => {
-    const file = pickupPhotoInput.files[0];
-    if(!file) {
-      pickupImagePreview.hidden = true;
-      confirmPickupBtn.disabled = true;
+  // Render meetup requests list
+  function renderMeetupRequests() {
+    if(orders.length === 0) {
+      meetupRequestsDiv.innerHTML = '<p>No meetup requests yet.</p>';
       return;
     }
-    const reader = new FileReader();
-    reader.onload = e => {
-      pickupImagePreview.src = e.target.result;
-      pickupImagePreview.hidden = false;
-      confirmPickupBtn.disabled = false;
-    };
-    reader.readAsDataURL(file);
-  });
-
-  confirmPickupBtn.addEventListener('click', () => {
-    if(pickupImagePreview.hidden) return toastMessage('Please upload a photo first.');
-    pickupData = {
-      timestamp: Date.now(),
-      photoData: pickupImagePreview.src
-    };
-    saveToStorage(PICKUP_STORAGE_KEY, pickupData);
-    toastMessage('Pickup confirmed. Thank you!');
-    confirmPickupBtn.disabled = true;
-    pickupPhotoInput.value = '';
-    pickupImagePreview.hidden = true;
-  });
-
-  pickupData = loadFromStorage(PICKUP_STORAGE_KEY, null);
-  if(pickupData) {
-    pickupImagePreview.src = pickupData.photoData;
-    pickupImagePreview.hidden = false;
-    confirmPickupBtn.disabled = true;
+    meetupRequestsDiv.innerHTML = '';
+    orders.forEach(order => {
+      const div = document.createElement('div');
+      div.className = 'meetup-request';
+      div.setAttribute('role', 'listitem');
+      div.innerHTML = `
+        <p><strong>${order.buyerName}</strong> — Location: ${order.meetupLocation} — Date: ${order.scheduledDate || 'Not scheduled'}</p>
+      `;
+      meetupRequestsDiv.appendChild(div);
+    });
   }
+  renderMeetupRequests();
 
-  // --- Profit display for your IP only ---
-  function checkIP() {
-    // This is a placeholder for actual IP check, here we simulate it
-    visitorIP = YOUR_IP; // For demo, set to your IP to show profit
-    if(visitorIP === YOUR_IP) {
-      profitDisplay.hidden = false;
-      updateProfitDisplay();
+  // Submit meetup feedback
+  meetupFeedbackForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = meetupNameInput.value.trim();
+    const response = meetupResponseInput.value;
+
+    if(!name || !response) {
+      alert("Please enter your name and select a response.");
+      return;
     }
-  }
+    meetupFeedbacks.push({
+      id: Date.now(),
+      name,
+      response,
+      date: new Date().toISOString()
+    });
+    localStorage.setItem('meetupFeedbacks', JSON.stringify(meetupFeedbacks));
 
-  function updateProfitDisplay() {
-    const totalProfit = calcTotal() - cart.reduce((sum, item) => sum + TAX_PER_ITEM * item.qty, 0);
-    profitDisplay.textContent = `Profit: ${formatPrice(totalProfit)}`;
-  }
+    meetupNameInput.value = '';
+    meetupResponseInput.value = '';
 
-  checkIP();
-
-  // Update profit display on cart changes
-  const observer = new MutationObserver(() => {
-    if(!profitDisplay.hidden) updateProfitDisplay();
+    showToast("Thank you for your feedback!");
   });
-  observer.observe(cartList, { childList: true });
+
+  // Admin panel login
+  adminPanelBtn.addEventListener('click', () => {
+    loginModal.classList.remove('hidden');
+    loginError.style.display = 'none';
+  });
+
+  loginBtn.addEventListener('click', () => {
+    const username = adminUsernameInput.value.trim();
+    const password = adminPasswordInput.value.trim();
+
+    if(username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+      loggedIn = true;
+      loginModal.classList.add('hidden');
+      adminUsernameInput.value = '';
+      adminPasswordInput.value = '';
+      showSection('adminDashboard');
+      renderAdminOrders();
+      renderAdminReviews();
+      renderProfit();
+      showToast("Logged in as Admin.");
+    } else {
+      loginError.style.display = 'block';
+    }
+  });
+
+  // Admin logout
+  logoutAdminBtn.addEventListener('click', () => {
+    loggedIn = false;
+    showSection('shopSection');
+    showToast("Logged out.");
+  });
+
+  // Render admin orders
+  function renderAdminOrders() {
+    if(orders.length === 0) {
+      adminOrdersList.innerHTML = '<p>No orders yet.</p>';
+      return;
+    }
+    adminOrdersList.innerHTML = '';
+    orders.forEach(order => {
+      const div = document.createElement('div');
+      div.className = 'admin-order-card';
+      div.innerHTML = `
+        <p><strong>Order #${order.id}</strong></p>
+        <p>Buyer: ${order.buyerName}</p>
+        <p>Location: ${order.meetupLocation}</p>
+        <p>Date: ${order.scheduledDate || 'Not scheduled'}</p>
+        <p>Status: ${order.status}</p>
+        <button data-id="${order.id}" class="fulfillOrderBtn">Mark as Fulfilled</button>
+      `;
+      adminOrdersList.appendChild(div);
+    });
+
+    // Attach fulfill buttons
+    adminOrdersList.querySelectorAll('.fulfillOrderBtn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = Number(btn.dataset.id);
+        const order = orders.find(o => o.id === id);
+        if(order) {
+          order.status = 'Fulfilled';
+          localStorage.setItem('orders', JSON.stringify(orders));
+          renderAdminOrders();
+          renderProfit();
+          showToast(`Order #${id} marked as fulfilled.`);
+        }
+      });
+    });
+  }
+
+  // Render admin reviews
+  function renderAdminReviews() {
+    if(reviews.length === 0) {
+      adminReviewsList.innerHTML = '<p>No reviews yet.</p>';
+      return;
+    }
+    adminReviewsList.innerHTML = '';
+    reviews.forEach(r => {
+      const div = document.createElement('div');
+      div.className = 'admin-review-card';
+      div.innerHTML = `
+        <p><strong>${r.name}</strong></p>
+        <p>Rating: ${r.rating} / 5</p>
+        <p>${r.text}</p>
+        <button data-id="${r.id}" class="deleteReviewBtn">Delete Review</button>
+      `;
+      adminReviewsList.appendChild(div);
+    });
+
+    // Attach delete review buttons
+    adminReviewsList.querySelectorAll('.deleteReviewBtn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = Number(btn.dataset.id);
+        reviews = reviews.filter(r => r.id !== id);
+        localStorage.setItem('reviews', JSON.stringify(reviews));
+        renderAdminReviews();
+        renderReviews();
+        showToast('Review deleted.');
+      });
+    });
+  }
+
+  // Calculate and render profit
+  function renderProfit() {
+    const fulfilledOrders = orders.filter(o => o.status === 'Fulfilled');
+    let profit = 0;
+    fulfilledOrders.forEach(order => {
+      order.items.forEach(item => {
+        profit += (item.basePrice + TAX_PER_UNIT) * item.qty;
+      });
+    });
+    profitDisplay.textContent = `$${profit.toFixed(2)}`;
+  }
 
 })();
 </script>
 
-</body>
-</html>
+<style>
+  /* Basic resets */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0; padding: 0;
+    background: #f9f9f9;
+    color: #222;
+  }
+  header {
+    background: #004080;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  nav button {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  nav button:focus {
+    outline: 2px solid #fff;
+  }
+  #navMenu {
+    display: none;
+    flex-direction: column;
+    background: #0066cc;
+    position: absolute;
+    top: 3.5rem;
+    left: 0;
+    width: 100%;
+  }
+  #navMenu.active {
+    display: flex;
+  }
+  #navMenu button {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid #0055aa;
+    text-align: left;
+  }
+  main {
+    padding: 1rem;
+    max-width: 900px;
+    margin: auto;
+  }
+  .card {
+    background: white;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  button {
+    background: #004080;
+    color: white;
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  button:hover, button:focus {
+    background: #003366;
+  }
+  #priceDisplay {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    font-weight: 600;
+    font-size: 1.2rem;
+  }
+  #cartList, #reviewsList, #adminOrdersList, #adminReviewsList, #meetupRequests {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  .qty-controls {
+    display: inline-flex;
+    align-items: center;
+  }
+  .qty-controls button {
+    width: 28px;
+    height: 28px;
+    font-size: 1.2rem;
+    line-height: 1;
+    padding: 0;
+    margin: 0 4px;
+  }
+  .star {
+    font-size: 1.6rem;
+    cursor: pointer;
+    color: #ccc;
+    user-select: none;
+  }
+  .star.selected, .star.hovered {
+    color: gold;
+  }
+  .review-card, .admin-order-card, .admin-review-card, .meetup-request {
+    border-bottom: 1px solid #ddd;
+    padding: 8px 0;
+  }
+  #loginModal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .modal-content {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 6px;
+    max-width: 320px;
+    width: 100%;
+    box-shadow: 0 0 10px rgba(0,0,0,0.25);
+    position: relative;
+  }
+  #loginError {
+    color: red;
+    margin-top: 0.5rem;
+    display: none;
+  }
+  #toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #004080;
+    color: white;
+    padding: 0.8rem 1.2rem;
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+  #toast.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+</style>
