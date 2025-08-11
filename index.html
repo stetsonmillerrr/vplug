@@ -1,796 +1,525 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>V Plug</title>
-<style>
-  :root {
-    --dark-bg: #121212;
-    --dark-bg2: #1f1f1f;
-    --text-light: #e0e0e0;
-    --accent-blue: #3b82f6;
-    --accent-purple: #8b5cf6;
-    --accent-gradient: linear-gradient(270deg, var(--accent-blue), var(--accent-purple));
-  }
-
-  @keyframes gradientAnim {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-
-  body {
-    margin: 0; padding: 1rem;
-    background: var(--dark-bg);
-    color: var(--text-light);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-      Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  }
-
-  h1, h2 {
-    text-align: center;
-    font-weight: 700;
-  }
-
-  label {
-    display: block;
-    margin-top: 1rem;
-  }
-
-  input[type="text"], input[type="number"], input[type="date"], select, textarea {
-    width: 100%;
-    margin-top: 0.4rem;
-    padding: 0.5rem;
-    border-radius: 8px;
-    border: 2px solid #444;
-    background: var(--dark-bg2);
-    color: var(--text-light);
-    transition: border-color 0.3s ease;
-    font-size: 1rem;
-  }
-  input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus, select:focus, textarea:focus {
-    outline: none;
-    border-image: var(--accent-gradient) 1;
-    border-width: 2px;
-    border-style: solid;
-    animation: gradientAnim 4s ease infinite;
-  }
-
-  button {
-    margin-top: 1rem;
-    width: 100%;
-    padding: 0.75rem;
-    font-weight: 700;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    background: var(--accent-gradient);
-    color: white;
-    box-shadow: 0 4px 14px rgb(59 130 246 / 0.6);
-    transition: background 0.3s ease;
-    font-size: 1.1rem;
-  }
-  button:hover:not(:disabled) {
-    background: linear-gradient(270deg, var(--accent-purple), var(--accent-blue));
-  }
-  button:disabled {
-    background: #555;
-    cursor: not-allowed;
-    box-shadow: none;
-  }
-
-  .animated-outline {
-    position: relative;
-    border-radius: 12px;
-    padding: 1rem;
-    margin-top: 1rem;
-    background: var(--dark-bg2);
-    box-shadow: inset 0 0 12px #222;
-    border: 3px solid transparent;
-    background-clip: padding-box;
-  }
-  .animated-outline::before {
-    content: "";
-    position: absolute;
-    top: -3px; left: -3px; right: -3px; bottom: -3px;
-    border-radius: 15px;
-    background: var(--accent-gradient);
-    background-size: 600% 600%;
-    animation: gradientAnim 6s ease infinite;
-    z-index: -1;
-  }
-
-  #cartContainer {
-    margin-top: 1rem;
-    border-radius: 12px;
-    background: var(--dark-bg2);
-    padding: 1rem;
-    max-height: 320px;
-    overflow-y: auto;
-  }
-
-  .cart-item {
-    border-radius: 10px;
-    background: #222;
-    margin-bottom: 1rem;
-    padding: 0.8rem;
-    border: 2px solid transparent;
-    position: relative;
-    animation: fadeIn 0.3s ease forwards;
-  }
-  .cart-item.blue-raz {
-    border-image: linear-gradient(270deg, var(--accent-blue), var(--accent-purple)) 1;
-    border-style: solid;
-  }
-  @keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
-  }
-
-  .cart-item-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: 600;
-  }
-  .cart-photo-thumb {
-    margin-top: 0.5rem;
-    max-width: 120px;
-    max-height: 120px;
-    border-radius: 8px;
-    border: 2px solid var(--accent-blue);
-  }
-  .removeItemBtn {
-    background: transparent;
-    border: none;
-    color: #f87171;
-    font-size: 1.4rem;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  .removeItemBtn:hover {
-    color: #ef4444;
-  }
-
-  .pickedUpLabel {
-    margin-left: 0.5rem;
-    font-weight: 600;
-    color: #22c55e;
-    cursor: pointer;
-  }
-
-  /* Reviews */
-  #reviewsList {
-    margin-top: 1rem;
-    max-height: 240px;
-    overflow-y: auto;
-  }
-  .review {
-    background: #222;
-    border-radius: 12px;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    position: relative;
-    font-size: 0.9rem;
-  }
-  .review-user {
-    font-weight: 700;
-  }
-  .review-stars {
-    color: gold;
-  }
-  .review-remove-btn {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    background: transparent;
-    border: none;
-    color: #ef4444;
-    font-weight: bold;
-    font-size: 1.1rem;
-    cursor: pointer;
-  }
-  .review-remove-btn:hover {
-    color: #f87171;
-  }
-  .review-recommend {
-    font-style: italic;
-    margin-top: 0.3rem;
-  }
-  .review-text {
-    margin-top: 0.4rem;
-    white-space: pre-wrap;
-  }
-
-  /* Toast notifications */
-  #toastContainer {
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    width: 320px;
-    max-width: 90vw;
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    pointer-events: none;
-  }
-  .toast {
-    pointer-events: auto;
-    display: flex;
-    align-items: center;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    color: white;
-    font-weight: 600;
-    box-shadow: 0 0 12px rgba(0,0,0,0.4);
-    opacity: 0;
-    transform: translateX(120%);
-    animation: slideIn 0.5s forwards;
-  }
-  @keyframes slideIn {
-    to {
-      opacity: 1;
-      transform: translateX(0);
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VapeShop - Clean & Easy</title>
+  <style>
+    /* Basic Reset & font */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-  }
-  @keyframes slideOut {
-    from {
-      opacity: 1;
-      transform: translateX(0);
+    body {
+      background: #f9f9f9;
+      color: #222;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
     }
-    to {
+    header {
+      background-color: #222;
+      color: #fff;
+      padding: 15px 30px;
+      font-weight: 700;
+      font-size: 1.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+    header .cart-icon {
+      position: relative;
+      font-size: 1.6rem;
+      cursor: pointer;
+    }
+    header .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -10px;
+      background: #f39c12;
+      color: #000;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 50%;
+      font-size: 0.8rem;
+      user-select: none;
+      min-width: 22px;
+      text-align: center;
+    }
+    main {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 15px;
+      display: flex;
+      gap: 25px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    /* Product cards */
+    .products {
+      flex: 2;
+      min-width: 320px;
+    }
+    .product-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+      padding: 18px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 20px;
+      transition: box-shadow 0.3s ease;
+    }
+    .product-card:hover {
+      box-shadow: 0 4px 14px rgb(0 0 0 / 0.15);
+    }
+    .product-image {
+      width: 140px;
+      height: 140px;
+      object-fit: contain;
+      border-radius: 12px;
+      background: #fefefe;
+      border: 1px solid #ddd;
+    }
+    .product-info {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 140px;
+    }
+    .product-info h3 {
+      font-size: 1.3rem;
+      color: #111;
+      margin-bottom: 8px;
+    }
+    .price {
+      color: #e74c3c;
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+    button.add-to-cart {
+      align-self: flex-start;
+      background-color: #f39c12;
+      border: none;
+      color: #000;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    button.add-to-cart:hover {
+      background-color: #d87e04;
+    }
+    /* Cart Sidebar */
+    .cart-sidebar {
+      flex: 1;
+      min-width: 280px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgb(0 0 0 / 0.1);
+      padding: 20px;
+      max-height: 600px;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 30px;
+    }
+    .cart-sidebar h2 {
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+      border-bottom: 2px solid #f39c12;
+      padding-bottom: 8px;
+    }
+    .cart-items {
+      flex-grow: 1;
+      overflow-y: auto;
+      margin-bottom: 15px;
+    }
+    .cart-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      gap: 12px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 12px;
+    }
+    .cart-item img {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      border-radius: 8px;
+      background: #fafafa;
+      border: 1px solid #ddd;
+    }
+    .cart-item-info {
+      flex-grow: 1;
+    }
+    .cart-item-info h4 {
+      font-size: 1rem;
+      color: #111;
+      margin-bottom: 4px;
+    }
+    .cart-item-info p {
+      font-size: 0.9rem;
+      color: #666;
+    }
+    .cart-item-actions button {
+      background: #e74c3c;
+      border: none;
+      color: white;
+      padding: 5px 9px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background-color 0.2s ease;
+    }
+    .cart-item-actions button:hover {
+      background: #c0392b;
+    }
+    .cart-total {
+      font-size: 1.4rem;
+      font-weight: 700;
+      border-top: 2px solid #ddd;
+      padding-top: 12px;
+      color: #222;
+    }
+    .checkout-btn {
+      margin-top: 15px;
+      background: #f39c12;
+      border: none;
+      padding: 14px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      font-size: 1.1rem;
+      transition: background-color 0.2s ease;
+      color: #000;
+    }
+    .checkout-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      color: #666;
+    }
+    .checkout-btn:hover:not(:disabled) {
+      background-color: #d87e04;
+    }
+    /* Reviews */
+    .reviews-section {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgb(0 0 0 / 0.1);
+      padding: 20px;
+      max-width: 800px;
+      margin: 40px auto;
+    }
+    .reviews-section h2 {
+      font-size: 1.6rem;
+      margin-bottom: 18px;
+      border-bottom: 2px solid #f39c12;
+      padding-bottom: 8px;
+    }
+    .review {
+      border-bottom: 1px solid #eee;
+      padding: 12px 0;
+    }
+    .review:last-child {
+      border-bottom: none;
+    }
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .reviewer-name {
+      font-weight: 700;
+      color: #222;
+    }
+    .review-rating {
+      color: #f39c12;
+      font-size: 1.1rem;
+    }
+    .review-text {
+      color: #555;
+      font-size: 1rem;
+      line-height: 1.4;
+      margin-left: 4px;
+    }
+    /* Notification */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #222;
+      color: #fff;
+      padding: 14px 22px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
       opacity: 0;
-      transform: translateX(120%);
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      z-index: 1000;
+      font-weight: 600;
+      min-width: 240px;
+      text-align: center;
+      user-select: none;
     }
-  }
-  .toast-success {
-    background: linear-gradient(90deg, #22c55e, #16a34a);
-  }
-  .toast-info {
-    background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
-  }
-  .toast-error {
-    background: linear-gradient(90deg, #ef4444, #b91c1c);
-  }
-  .toast-close {
-    margin-left: auto;
-    cursor: pointer;
-    font-weight: bold;
-  }
-
-  /* Responsive */
-  @media (max-width: 480px) {
-    #toastContainer {
-      width: 90vw;
-      right: 5vw;
-      top: 0.5rem;
+    .notification.show {
+      opacity: 1;
+      pointer-events: auto;
     }
-  }
-</style>
+    /* Responsive */
+    @media (max-width: 900px) {
+      main {
+        flex-direction: column;
+        align-items: center;
+      }
+      .cart-sidebar {
+        max-height: none;
+        position: relative;
+        top: auto;
+        margin-top: 30px;
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<h1>V Plug💨</h1>
+  <header>
+    VapeShop
+    <div class="cart-icon" aria-label="Shopping Cart" tabindex="0">
+      🛒
+      <span class="cart-count" id="cart-count">0</span>
+    </div>
+  </header>
 
-<!-- Order Form -->
-<div class="animated-outline" aria-label="Order form">
-  <label for="buyerName">Your Name</label>
-  <input type="text" id="buyerName" placeholder="Enter your name" autocomplete="off" aria-required="true"/>
+  <main>
+    <section class="products" id="products">
+      <!-- Products inserted here -->
+    </section>
 
-  <label for="flavorSelect">Flavor</label>
-  <select id="flavorSelect" aria-required="true" aria-label="Select vape flavor">
-    <option value="">Select flavor...</option>
-    <option value="Blue Raz">Blue Raz</option>
-  </select>
+    <aside class="cart-sidebar" aria-label="Shopping Cart">
+      <h2>Your Cart</h2>
+      <div class="cart-items" id="cart-items">
+        <p>Your cart is empty.</p>
+      </div>
+      <div class="cart-total" id="cart-total">Total: $0.00</div>
+      <button class="checkout-btn" id="checkout-btn" disabled>Checkout</button>
+    </aside>
+  </main>
 
-  <label for="quantityInput">Quantity</label>
-  <input type="number" id="quantityInput" min="1" max="99" value="1" aria-required="true" />
+  <section class="reviews-section" aria-label="Product Reviews">
+    <h2>Customer Reviews</h2>
+    <div id="reviews-list">
+      <!-- Reviews inserted here -->
+    </div>
+  </section>
 
-  <button id="addToCartBtn" disabled>Add to Cart</button>
-</div>
-
-<!-- Cart Section -->
-<section aria-label="Shopping cart">
-  <h2>Your Cart</h2>
-  <div id="cartContainer" aria-live="polite" tabindex="0">Your cart is empty.</div>
-  <div id="profitDisplay" style="margin-top: 1rem; font-weight: bold;"></div>
-  <div id="orderSummary" style="margin-top: 0.5rem; font-style: italic;"></div>
-</section>
-
-<!-- Schedule Section -->
-<section aria-label="Meetup scheduling">
-  <h2>Scheduled Meet-Up</h2>
-  <label for="scheduledDateInput">Set meet-up date (seller)</label>
-  <input type="date" id="scheduledDateInput" />
-  <button id="setScheduleBtn">Save Date</button>
-
-  <div id="buyerScheduleSection" style="margin-top:1rem; display:none;">
-    <label for="buyerDateInput">Confirm or suggest best meet-up date (buyer)</label>
-    <input type="date" id="buyerDateInput" />
-    <button id="submitBuyerDateBtn">Submit Date</button>
-    <div id="buyerDateStatus" style="margin-top: 0.5rem; font-style: italic;"></div>
-  </div>
-</section>
-
-<!-- Order Pickup & Photo -->
-<section aria-label="Order pickup and photo proof">
-  <h2>Order Pickup</h2>
-  <div id="orderPickupList" style="max-height: 200px; overflow-y:auto; background: var(--dark-bg2); padding: 1rem; border-radius: 12px;">
-    No orders placed yet.
-  </div>
-</section>
-
-<!-- Reviews Section -->
-<section aria-label="Reviews">
-  <h2>Reviews</h2>
-  <label for="reviewName">Name</label>
-  <input type="text" id="reviewName" placeholder="Name for review" autocomplete="off" />
-
-  <fieldset id="ratingGroup" style="margin-top: 0.5rem;">
-    <legend>Rate service quality (1 to 5 stars)</legend>
-    <label><input type="radio" name="rating" value="1" /> 1 ★</label>
-    <label><input type="radio" name="rating" value="2" /> 2 ★</label>
-    <label><input type="radio" name="rating" value="3" /> 3 ★</label>
-    <label><input type="radio" name="rating" value="4" /> 4 ★</label>
-    <label><input type="radio" name="rating" value="5" /> 5 ★</label>
-  </fieldset>
-
-  <label for="recommendSelect" style="margin-top: 0.5rem;">Would you recommend?</label>
-  <select id="recommendSelect" aria-label="Recommend vape plug">
-    <option value="">Select...</option>
-    <option value="Yes">Yes</option>
-    <option value="No">No</option>
-  </select>
-
-  <label for="reviewText" style="margin-top: 0.6rem;">Comments (optional)</label>
-  <textarea id="reviewText" rows="3" placeholder="Write your review..."></textarea>
-
-  <button id="submitReviewBtn" style="margin-bottom:1rem;">Submit Review</button>
-
-  <div id="reviewsList" aria-live="polite" tabindex="0" style="max-height: 240px; overflow-y: auto;"></div>
-</section>
-
-<!-- Toast Notification Container -->
-<div id="toastContainer" role="alert" aria-live="assertive"></div>
+  <div class="notification" id="notification"></div>
 
 <script>
-(() => {
-  // Constants & pricing
-  const PRICES = {
-    "Blue Raz": 15 // example price per vape
-  };
+  // Vape Products Data
+  const products = [
+    {
+      id: 101,
+      name: "VapePro X100 Mod",
+      price: 79.99,
+      image: "https://cdn.shopify.com/s/files/1/0281/2659/7614/products/vaporesso-target-pm80-se_1200x1200.jpg"
+    },
+    {
+      id: 102,
+      name: "CloudMaster Pod Kit",
+      price: 49.99,
+      image: "https://vaped.com.ua/image/cache/catalog/product/vape/relx/relx-classic-1000x1000.jpg"
+    },
+    {
+      id: 103,
+      name: "Nicotina Menthol E-liquid 60ml",
+      price: 24.99,
+      image: "https://vapeguide.eu/wp-content/uploads/2020/10/menthol-eliquid-60ml.jpg"
+    },
+    {
+      id: 104,
+      name: "Smooth Tobacco E-liquid 120ml",
+      price: 39.99,
+      image: "https://cdn.shopify.com/s/files/1/0169/6286/products/tobacco-flavor-eliquid_1200x1200.jpg"
+    }
+  ];
 
-  // Elements
-  const buyerNameInput = document.getElementById("buyerName");
-  const flavorSelect = document.getElementById("flavorSelect");
-  const quantityInput = document.getElementById("quantityInput");
-  const addToCartBtn = document.getElementById("addToCartBtn");
-  const cartContainer = document.getElementById("cartContainer");
-  const profitDisplay = document.getElementById("profitDisplay");
-  const orderSummary = document.getElementById("orderSummary");
-  const scheduledDateInput = document.getElementById("scheduledDateInput");
-  const setScheduleBtn = document.getElementById("setScheduleBtn");
-  const buyerScheduleSection = document.getElementById("buyerScheduleSection");
-  const buyerDateInput = document.getElementById("buyerDateInput");
-  const submitBuyerDateBtn = document.getElementById("submitBuyerDateBtn");
-  const buyerDateStatus = document.getElementById("buyerDateStatus");
-  const orderPickupList = document.getElementById("orderPickupList");
+  // Reviews Data
+  const reviews = [
+    {
+      id: 201,
+      name: "Jake M.",
+      rating: 5,
+      text: "VapePro X100 is the best mod I've ever used—smooth clouds and excellent battery life!"
+    },
+    {
+      id: 202,
+      name: "Samantha K.",
+      rating: 4,
+      text: "CloudMaster Pod is compact and perfect for on-the-go vaping. Flavor is rich and consistent."
+    },
+    {
+      id: 203,
+      name: "Carlos R.",
+      rating: 5,
+      text: "The menthol e-liquid is refreshing and hits perfectly. Highly recommend for menthol lovers!"
+    }
+  ];
 
-  // Review elements
-  const reviewNameInput = document.getElementById("reviewName");
-  const ratingGroup = document.getElementById("ratingGroup");
-  const recommendSelect = document.getElementById("recommendSelect");
-  const reviewText = document.getElementById("reviewText");
-  const submitReviewBtn = document.getElementById("submitReviewBtn");
-  const reviewsList = document.getElementById("reviewsList");
+  const productsContainer = document.getElementById('products');
+  const cartItemsContainer = document.getElementById('cart-items');
+  const cartCount = document.getElementById('cart-count');
+  const cartTotal = document.getElementById('cart-total');
+  const checkoutBtn = document.getElementById('checkout-btn');
+  const notification = document.getElementById('notification');
+  const reviewsList = document.getElementById('reviews-list');
 
-  // Toast container
-  const toastContainer = document.getElementById("toastContainer");
+  let cart = {};
 
-  // LocalStorage keys
-  const CART_KEY = "vapePlugCart";
-  const ORDERS_KEY = "vapePlugOrders";
-  const SCHEDULED_DATE_KEY = "vapePlugScheduledDate";
-  const BUYER_DATE_KEY = "vapePlugBuyerDate";
-  const REVIEWS_KEY = "vapePlugReviews";
-  const USER_RATED_KEY = "vapePlugUserRated";
-
-  // State
-  let cart = [];
-  let orders = [];
-  let scheduledDate = null;
-  let buyerDate = null;
-  let reviews = [];
-  let userRated = {}; // track ratings by name-flavor combo to block double rating
-
-  // Utility: Mask name (first char visible + stars)
-  function maskName(name) {
-    if (!name) return "";
-    return name[0].toUpperCase() + "*".repeat(Math.max(0, name.length - 1));
+  // Format price as $xx.xx
+  function formatPrice(num) {
+    return `$${num.toFixed(2)}`;
   }
 
-  // Utility: Toast notifications
-  function showToast(message, type = "info", duration = 3500) {
-    const toast = document.createElement("div");
-    toast.className = "toast toast-" + type;
-    toast.setAttribute("role", "alert");
-    toast.setAttribute("aria-live", "assertive");
-    toast.textContent = message;
-
-    // Close button
-    const closeBtn = document.createElement("button");
-    closeBtn.textContent = "×";
-    closeBtn.className = "toast-close";
-    closeBtn.setAttribute("aria-label", "Close notification");
-    closeBtn.onclick = () => removeToast(toast);
-    toast.appendChild(closeBtn);
-
-    toastContainer.appendChild(toast);
-
-    // Auto-remove
+  // Show notification
+  function showNotification(message) {
+    notification.textContent = message;
+    notification.classList.add('show');
     setTimeout(() => {
-      removeToast(toast);
-    }, duration);
+      notification.classList.remove('show');
+    }, 2500);
   }
 
-  function removeToast(toast) {
-    toast.style.animation = "slideOut 0.5s forwards";
-    toast.addEventListener("animationend", () => {
-      toast.remove();
+  // Render products
+  function renderProducts() {
+    productsContainer.innerHTML = '';
+    products.forEach(product => {
+      const card = document.createElement('article');
+      card.className = 'product-card';
+      card.innerHTML = `
+        <img class="product-image" src="${product.image}" alt="${product.name}" loading="lazy" />
+        <div class="product-info">
+          <h3>${product.name}</h3>
+          <div class="price">${formatPrice(product.price)}</div>
+          <button class="add-to-cart" data-id="${product.id}">Add to Cart</button>
+        </div>
+      `;
+      productsContainer.appendChild(card);
     });
   }
-
-  // Save/load helpers
-  function saveCart() {
-    localStorage.setItem(CART_KEY, JSON.stringify(cart));
-  }
-  function loadCart() {
-    const saved = localStorage.getItem(CART_KEY);
-    if (saved) {
-      cart = JSON.parse(saved);
-    }
-  }
-  function saveOrders() {
-    localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
-  }
-  function loadOrders() {
-    const saved = localStorage.getItem(ORDERS_KEY);
-    if (saved) {
-      orders = JSON.parse(saved);
-    }
-  }
-  function saveScheduledDate() {
-    if (scheduledDate) {
-      localStorage.setItem(SCHEDULED_DATE_KEY, scheduledDate);
-    } else {
-      localStorage.removeItem(SCHEDULED_DATE_KEY);
-    }
-  }
-  function loadScheduledDate() {
-    const saved = localStorage.getItem(SCHEDULED_DATE_KEY);
-    if (saved) {
-      scheduledDate = saved;
-      scheduledDateInput.value = saved;
-      buyerScheduleSection.style.display = "block";
-    }
-  }
-  function saveBuyerDate() {
-    if (buyerDate) {
-      localStorage.setItem(BUYER_DATE_KEY, buyerDate);
-    } else {
-      localStorage.removeItem(BUYER_DATE_KEY);
-    }
-  }
-  function loadBuyerDate() {
-    const saved = localStorage.getItem(BUYER_DATE_KEY);
-    if (saved) {
-      buyerDate = saved;
-      buyerDateInput.value = saved;
-      buyerDateStatus.textContent = "Your suggested date: " + saved;
-    }
-  }
-  function saveReviews() {
-    localStorage.setItem(REVIEWS_KEY, JSON.stringify(reviews));
-  }
-  function loadReviews() {
-    const saved = localStorage.getItem(REVIEWS_KEY);
-    if (saved) {
-      reviews = JSON.parse(saved);
-    }
-  }
-  function saveUserRated() {
-    localStorage.setItem(USER_RATED_KEY, JSON.stringify(userRated));
-  }
-  function loadUserRated() {
-    const saved = localStorage.getItem(USER_RATED_KEY);
-    if (saved) {
-      userRated = JSON.parse(saved);
-    }
-  }
-
-  // Enable Add to Cart button only if valid
-  function validateOrderInputs() {
-    const valid =
-      buyerNameInput.value.trim().length > 0 &&
-      flavorSelect.value &&
-      parseInt(quantityInput.value) > 0;
-    addToCartBtn.disabled = !valid;
-  }
-  buyerNameInput.addEventListener("input", validateOrderInputs);
-  flavorSelect.addEventListener("change", validateOrderInputs);
-  quantityInput.addEventListener("input", validateOrderInputs);
-
-  // Add to cart function
-  addToCartBtn.addEventListener("click", () => {
-    const buyer = buyerNameInput.value.trim();
-    const flavor = flavorSelect.value;
-    const qty = parseInt(quantityInput.value);
-
-    if (!buyer || !flavor || qty < 1) {
-      showToast("Please fill all fields correctly", "error");
-      return;
-    }
-
-    // Add to cart array
-    cart.push({
-      buyer,
-      flavor,
-      quantity: qty,
-      pickedUp: false,
-      photoProof: null,
-      id: Date.now() + Math.random().toString(36).slice(2),
-    });
-
-    saveCart();
-    renderCart();
-
-    // Clear inputs
-    //buyerNameInput.value = "";
-    //flavorSelect.value = "";
-    //quantityInput.value = 1;
-    addToCartBtn.disabled = true;
-
-    // Notify
-    showToast(`Order placed for ${flavor} x${qty}. We will remind you to pick up!`, "success");
-
-    // Send discreet notification reminder after 10 seconds (for demo: 10s; adjust in real use)
-    setTimeout(() => {
-      showToast(`Reminder: You ordered ${flavor} x${qty}. Don't forget to pick up!`, "info", 5000);
-    }, 10000);
-
-    // Save order also for pickup management
-    orders.push(cart[cart.length - 1]);
-    saveOrders();
-    renderOrders();
-  });
 
   // Render cart
   function renderCart() {
-    if (cart.length === 0) {
-      cartContainer.textContent = "Your cart is empty.";
-      profitDisplay.textContent = "";
-      orderSummary.textContent = "";
+    cartItemsContainer.innerHTML = '';
+    const cartEntries = Object.values(cart);
+
+    if (cartEntries.length === 0) {
+      cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+      cartCount.textContent = '0';
+      cartTotal.textContent = 'Total: $0.00';
+      checkoutBtn.disabled = true;
       return;
     }
 
-    cartContainer.innerHTML = "";
-    let total = 0;
-    cart.forEach((item) => {
-      const div = document.createElement("div");
-      div.className = "cart-item " + (item.flavor === "Blue Raz" ? "blue-raz" : "");
-      div.setAttribute("data-id", item.id);
-
-      const priceEach = PRICES[item.flavor] || 0;
-      const itemTotal = priceEach * item.quantity;
-      total += itemTotal;
-
-      div.innerHTML = `
-        <div class="cart-item-header">
-          <span>${item.flavor} x${item.quantity}</span>
-          <button class="removeItemBtn" aria-label="Remove order">×</button>
+    cartEntries.forEach(item => {
+      const cartItem = document.createElement('div');
+      cartItem.className = 'cart-item';
+      cartItem.innerHTML = `
+        <img src="${item.image}" alt="${item.name}" />
+        <div class="cart-item-info">
+          <h4>${item.name}</h4>
+          <p>Qty: ${item.quantity} × ${formatPrice(item.price)}</p>
         </div>
-        <div>Buyer: ${item.buyer}</div>
-        <div>Price: $${itemTotal.toFixed(2)}</div>
-      `;
-
-      // Remove button
-      const removeBtn = div.querySelector(".removeItemBtn");
-      removeBtn.onclick = () => {
-        cart = cart.filter(i => i.id !== item.id);
-        saveCart();
-        renderCart();
-      };
-
-      cartContainer.appendChild(div);
-    });
-
-    profitDisplay.textContent = `Total cost: $${total.toFixed(2)}`;
-
-    // Show summary
-    orderSummary.textContent = `You have ${cart.length} order(s) in cart.`;
-  }
-
-  // Scheduled meetup date (seller)
-  setScheduleBtn.addEventListener("click", () => {
-    const val = scheduledDateInput.value;
-    if (!val) {
-      showToast("Please select a valid date", "error");
-      return;
-    }
-    scheduledDate = val;
-    saveScheduledDate();
-    buyerScheduleSection.style.display = "block";
-    showToast("Meetup date saved.", "success");
-  });
-
-  // Buyer suggests or confirms date
-  submitBuyerDateBtn.addEventListener("click", () => {
-    const val = buyerDateInput.value;
-    if (!val) {
-      showToast("Please select a valid date", "error");
-      return;
-    }
-    buyerDate = val;
-    saveBuyerDate();
-    buyerDateStatus.textContent = `Your suggested date: ${val}`;
-    showToast("Your meetup date preference is saved.", "success");
-  });
-
-  // Load orders and render
-  function renderOrders() {
-    if (orders.length === 0) {
-      orderPickupList.textContent = "No orders placed yet.";
-      return;
-    }
-
-    orderPickupList.innerHTML = "";
-    orders.forEach(order => {
-      const div = document.createElement("div");
-      div.className = "cart-item " + (order.flavor === "Blue Raz" ? "blue-raz" : "");
-      div.setAttribute("data-id", order.id);
-
-      let photoHtml = "";
-      if (order.photoProof) {
-        photoHtml = `<img src="${order.photoProof}" alt="Photo proof of pickup" class="cart-photo-thumb" />`;
-      }
-
-      div.innerHTML = `
-        <div class="cart-item-header">
-          <span>${order.flavor} x${order.quantity}</span>
-          <label class="pickedUpLabel">
-            <input type="checkbox" ${order.pickedUp ? "checked" : ""} /> Picked Up
-          </label>
-        </div>
-        <div>Buyer: ${order.buyer}</div>
-        ${photoHtml}
-        <div style="margin-top:0.5rem;">
-          <label>Upload pickup photo:</label><br />
-          <input type="file" accept="image/*" aria-label="Upload pickup photo" />
+        <div class="cart-item-actions">
+          <button aria-label="Remove ${item.name}" data-id="${item.id}">&times;</button>
         </div>
       `;
-
-      // Handle checkbox toggle
-      const checkbox = div.querySelector("input[type=checkbox]");
-      checkbox.addEventListener("change", e => {
-        order.pickedUp = e.target.checked;
-        saveOrders();
-        showToast(`Order marked as ${order.pickedUp ? "picked up" : "not picked up"}.`, "info");
-        renderOrders();
-      });
-
-      // Handle photo upload
-      const fileInput = div.querySelector("input[type=file]");
-      fileInput.addEventListener("change", e => {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = () => {
-          order.photoProof = reader.result;
-          saveOrders();
-          showToast("Pickup photo saved.", "success");
-          renderOrders();
-        };
-        reader.readAsDataURL(file);
-      });
-
-      orderPickupList.appendChild(div);
+      cartItemsContainer.appendChild(cartItem);
     });
+
+    const totalPrice = cartEntries.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    cartCount.textContent = cartEntries.reduce((sum, item) => sum + item.quantity, 0);
+    cartTotal.textContent = `Total: ${formatPrice(totalPrice)}`;
+    checkoutBtn.disabled = false;
   }
 
-  // Mask stars for rating
-  function renderStars(rating) {
-    return "★".repeat(rating) + "☆".repeat(5 - rating);
-  }
-
-  // Render reviews list
+  // Render reviews
   function renderReviews() {
-    if (reviews.length === 0) {
-      reviewsList.textContent = "No reviews yet.";
-      return;
-    }
-    reviewsList.innerHTML = "";
-    reviews.forEach((rev, idx) => {
-      const div = document.createElement("div");
-      div.className = "review";
-      div.setAttribute("data-idx", idx);
-
-      div.innerHTML = `
-        <div class="review-user">${maskName(rev.name)} says:</div>
-        <div class="review-stars" aria-label="Rating">${renderStars(rev.rating)}</div>
-        <div class="review-recommend">Recommend: ${rev.recommend}</div>
-        <div class="review-text">${rev.text ? rev.text : ""}</div>
-        <button class="review-remove-btn" aria-label="Remove review">×</button>
+    reviewsList.innerHTML = '';
+    reviews.forEach(review => {
+      const reviewDiv = document.createElement('div');
+      reviewDiv.className = 'review';
+      reviewDiv.innerHTML = `
+        <div class="review-header">
+          <span class="reviewer-name">${review.name}</span>
+          <span class="review-rating">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</span>
+        </div>
+        <p class="review-text">${review.text}</p>
       `;
-
-      const removeBtn = div.querySelector(".review-remove-btn");
-      removeBtn.addEventListener("click", () => {
-        reviews.splice(idx, 1);
-        saveReviews();
-        renderReviews();
-        showToast("Review removed.", "info");
-      });
-
-      reviewsList.appendChild(div);
+      reviewsList.appendChild(reviewDiv);
     });
   }
 
-  // Submit review
-  submitReviewBtn.addEventListener("click", () => {
-    const name = reviewNameInput.value.trim();
-    const ratingInput = ratingGroup.querySelector('input[name="rating"]:checked');
-    const recommend = recommendSelect.value;
-    const text = reviewText.value.trim();
+  // Add to cart handler
+  function addToCart(productId) {
+    const product = products.find(p => p.id == productId);
+    if (!product) return;
 
-    if (!name) {
-      showToast("Please enter your name for review.", "error");
-      return;
+    if (cart[productId]) {
+      cart[productId].quantity++;
+    } else {
+      cart[productId] = {...product, quantity: 1};
     }
-    if (!ratingInput) {
-      showToast("Please select a rating.", "error");
-      return;
-    }
-    if (!recommend) {
-      showToast("Please select if you recommend or not.", "error");
-      return;
-    }
-
-    const rating = parseInt(ratingInput.value);
-
-    // Prevent multiple reviews by same person & rating combo? Optional here.
-
-    reviews.push({ name, rating, recommend, text });
-    saveReviews();
-    renderReviews();
-
-    // Clear form
-    reviewNameInput.value = "";
-    ratingGroup.querySelectorAll('input[name="rating"]').forEach(i => i.checked = false);
-    recommendSelect.value = "";
-    reviewText.value = "";
-
-    showToast("Thank you for your review!", "success");
-  });
-
-  // Initialization
-  function init() {
-    loadCart();
-    loadOrders();
-    loadScheduledDate();
-    loadBuyerDate();
-    loadReviews();
-    loadUserRated();
-
     renderCart();
-    renderOrders();
-    renderReviews();
-
-    if (scheduledDate) buyerScheduleSection.style.display = "block";
+    showNotification(`Added "${product.name}" to cart.`);
   }
 
-  init();
-})();
+  // Remove from cart handler
+  function removeFromCart(productId) {
+    if (!cart[productId]) return;
+    const productName = cart[productId].name;
+    delete cart[productId];
+    renderCart();
+    showNotification(`Removed "${productName}" from cart.`);
+  }
+
+  // Checkout handler (dummy)
+  function checkout() {
+    if (Object.keys(cart).length === 0) return;
+    showNotification('Checkout is currently not implemented.');
+  }
+
+  // Event Listeners
+  productsContainer.addEventListener('click', e => {
+    if (e.target.classList.contains('add-to-cart')) {
+      addToCart(e.target.dataset.id);
+    }
+  });
+
+  cartItemsContainer.addEventListener('click', e => {
+    if (e.target.tagName === 'BUTTON') {
+      removeFromCart(e.target.dataset.id);
+    }
+  });
+
+  checkoutBtn.addEventListener('click', checkout);
+
+  // Initial render
+  renderProducts();
+  renderCart();
+  renderReviews();
 </script>
 
 </body>
